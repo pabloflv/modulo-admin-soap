@@ -67,7 +67,7 @@ public class Usuario {
     private Boolean primerIngreso;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "idTipoUsuario")
+    @JoinColumn(name = "idRol")
     @ApiModelProperty(notes = "tipoUsuario", required = true, position = 10)
     private Rol rol;
 
