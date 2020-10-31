@@ -1,0 +1,19 @@
+package ar.com.unla.api.repositories;
+
+import ar.com.unla.api.models.database.UsuarioMateria;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UsuarioMateriaRepository extends JpaRepository<UsuarioMateria, Long> {
+
+    @Query("SELECT usm FROM UsuarioMateria usm INNER JOIN usm.usuario u INNER "
+            + "JOIN usm.materia m WHERE m.id = :idMateria")
+    List<UsuarioMateria> findUsersBySubject(long idMateria);
+
+    @Query("SELECT usm FROM UsuarioMateria usm INNER JOIN usm.usuario u INNER "
+            + "JOIN usm.materia m WHERE u.id = :idUsuario")
+    List<UsuarioMateria> findSubjectsByUser(long idUsuario);
+}

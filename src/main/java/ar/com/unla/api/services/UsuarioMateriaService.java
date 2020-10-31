@@ -1,0 +1,60 @@
+package ar.com.unla.api.services;
+
+import ar.com.unla.api.dtos.UsuarioMateriaDTO;
+import ar.com.unla.api.exceptions.NotFoundApiException;
+import ar.com.unla.api.models.database.Materia;
+import ar.com.unla.api.models.database.Usuario;
+import ar.com.unla.api.models.database.UsuarioMateria;
+import ar.com.unla.api.repositories.UsuarioMateriaRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UsuarioMateriaService {
+
+    @Autowired
+    private UsuarioMateriaRepository usuarioMateriaRepository;
+
+    @Autowired
+    private MateriaService materiaService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    public UsuarioMateria create(UsuarioMateriaDTO usuarioMateriaDTO) {
+
+        Materia materia =
+                materiaService.findById(usuarioMateriaDTO.getIdMateria());
+
+        Usuario usuario = usuarioService.findById(usuarioMateriaDTO.getIdUsuario());
+
+        UsuarioMateria usuarioMateria = new UsuarioMateria(materia, usuario,
+                usuarioMateriaDTO.getRecordatorio(), usuarioMateriaDTO.getCalificacion());
+
+        return usuarioMateriaRepository.save(usuarioMateria);
+    }
+
+    public UsuarioMateria findById(Long id) {
+        return usuarioMateriaRepository.findById(id)
+                .orElseThrow(() -> new NotFoundApiException(
+                        "Id UsuarioMateria incorrecto. No se encontro el UsuarioMateria "
+                                + "indicado."));
+    }
+
+    public List<UsuarioMateria> findUsersBySubject(Long idMateria) {
+        materiaService.findById(idMateria);
+        return usuarioMateriaRepository.findUsersBySubject(idMateria);
+    }
+
+    public List<UsuarioMateria> findSubjectsByUser(Long idUsuario) {
+        usuarioService.findById(idUsuario);
+        return usuarioMateriaRepository.findSubjectsByUser(idUsuario);
+    }
+
+    public void delete(Long id) {
+        findById(id);
+        usuarioMateriaRepository.deleteById(id);
+    }
+
+}
