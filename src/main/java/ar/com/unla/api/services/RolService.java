@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.RolDTO;
+import ar.com.unla.api.dtos.request.RolDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Rol;
 import ar.com.unla.api.repositories.RolRepository;

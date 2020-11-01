@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.HorarioMateriaDTO;
+import ar.com.unla.api.dtos.request.HorarioMateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.HorarioMateria;
 import ar.com.unla.api.models.database.Materia;

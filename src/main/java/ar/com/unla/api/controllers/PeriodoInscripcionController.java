@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.PeriodoInscripcionDTO;
+import ar.com.unla.api.dtos.request.PeriodoInscripcionDTO;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;

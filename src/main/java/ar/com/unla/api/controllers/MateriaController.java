@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.MateriaDTO;
+import ar.com.unla.api.dtos.request.MateriaDTO;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;

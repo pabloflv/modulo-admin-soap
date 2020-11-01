@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.UsuarioExamenFinalDTO;
+import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
@@ -103,6 +103,7 @@ public class UsuarioExamenFinalController {
                 usuarioExamenFinalService.findUsersByFinalExam(idExamenFinal), null);
     }
 
+    //TODO://lista de materias diferenciando las inscriptas y no inscriptas
     @GetMapping(path = "/finales", params = {"idUsuario"})
     @ApiOperation(value = "Se encarga de buscar una lista de examenes finales relacionados a un "
             + "usuario")
@@ -118,6 +119,8 @@ public class UsuarioExamenFinalController {
                             response = ErrorResponse.class)
             }
     )
+
+    //TODO://lista de usuarios pertenecientes a una materia de rol alumno
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<UsuarioExamenFinal>> getFinalExamsByUser(
             @RequestParam(name = "idUsuario")

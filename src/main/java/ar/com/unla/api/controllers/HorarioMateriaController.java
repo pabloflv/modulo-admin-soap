@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.HorarioMateriaDTO;
+import ar.com.unla.api.dtos.request.HorarioMateriaDTO;
 import ar.com.unla.api.models.database.HorarioMateria;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;

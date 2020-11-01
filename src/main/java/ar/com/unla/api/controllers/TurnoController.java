@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.TurnoDTO;
+import ar.com.unla.api.dtos.request.TurnoDTO;
 import ar.com.unla.api.models.database.Turno;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;

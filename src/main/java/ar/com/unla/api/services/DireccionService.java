@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.DireccionDTO;
+import ar.com.unla.api.dtos.request.DireccionDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Direccion;
 import ar.com.unla.api.repositories.DireccionRepository;

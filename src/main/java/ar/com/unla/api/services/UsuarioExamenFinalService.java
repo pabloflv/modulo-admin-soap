@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.UsuarioExamenFinalDTO;
+import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Usuario;

@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.ExamenFinalDTO;
+import ar.com.unla.api.dtos.request.ExamenFinalDTO;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;

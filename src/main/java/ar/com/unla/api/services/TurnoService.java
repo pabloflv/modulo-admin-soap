@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.TurnoDTO;
+import ar.com.unla.api.dtos.request.TurnoDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Turno;
 import ar.com.unla.api.repositories.TurnoRepository;

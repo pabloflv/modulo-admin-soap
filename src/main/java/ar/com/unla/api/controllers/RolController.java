@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.RolDTO;
+import ar.com.unla.api.dtos.request.RolDTO;
 import ar.com.unla.api.models.database.Rol;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
