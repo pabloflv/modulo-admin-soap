@@ -15,25 +15,29 @@ public class MateriaDTO {
 
     @NotBlank(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @ApiModelProperty(required = true, position = 1)
-    private String descripcion;
+    private String nombre;
+
+    @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
+    @ApiModelProperty(required = true, position = 2)
+    private Long idProfesor;
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @Max(value = 2, message = CommonsErrorConstants.MAX_VALUE_ERROR)
     @Min(value = 1, message = CommonsErrorConstants.MIN_VALUE_ERROR)
-    @ApiModelProperty(required = true, position = 2)
+    @ApiModelProperty(required = true, position = 3)
     private Integer cuatrimestre;
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @Max(value = 5, message = CommonsErrorConstants.MAX_VALUE_ERROR)
     @Min(value = 1, message = CommonsErrorConstants.MIN_VALUE_ERROR)
-    @ApiModelProperty(required = true, position = 3)
+    @ApiModelProperty(required = true, position = 4)
     private Integer anioCarrera;
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
-    @ApiModelProperty(required = true, position = 4)
+    @ApiModelProperty(required = true, position = 5)
     private Long idTurno;
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
-    @ApiModelProperty(required = true, position = 5)
+    @ApiModelProperty(required = true, position = 6)
     private Long idPeriodoInscripcionDTO;
 }

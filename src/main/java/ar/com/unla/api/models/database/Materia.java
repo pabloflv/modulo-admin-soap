@@ -37,36 +37,42 @@ public class Materia {
             position = 1)
     private String nombre;
 
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "idProfesor")
+    @ApiModelProperty(notes = "profesor", position = 2)
+    private Usuario profesor;
+
     @Column(nullable = false)
-    @ApiModelProperty(notes = "cuatrimestre", required = true, example = "1", position = 2)
+    @ApiModelProperty(notes = "cuatrimestre", required = true, example = "1", position = 3)
     private Integer cuatrimestre;
 
     @Column(nullable = false)
-    @ApiModelProperty(notes = "anio", required = true, example = "2020", position = 3)
+    @ApiModelProperty(notes = "anio", required = true, example = "2020", position = 4)
     private Integer anioCarrera;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "idTurno")
-    @ApiModelProperty(notes = "turno", position = 4)
+    @ApiModelProperty(notes = "turno", position = 5)
     private Turno turno;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "idPeriodoInscripcion")
-    @ApiModelProperty(notes = "periodoInscripcion", position = 5)
+    @ApiModelProperty(notes = "periodoInscripcion", position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "materia", cascade = {CascadeType.MERGE,
             CascadeType.REFRESH})
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty(notes = "horarios", position = 6)
+    @ApiModelProperty(notes = "horarios", position = 7)
     private Set<HorarioMateria> horarios = new HashSet<>();
 
     public Materia() {
     }
 
-    public Materia(String nombre, Integer cuatrimestre, Integer anioCarrera,
+    public Materia(String nombre, Usuario profesor, Integer cuatrimestre, Integer anioCarrera,
             Turno turno, PeriodoInscripcion periodoInscripcion) {
         this.nombre = nombre;
+        this.profesor = profesor;
         this.cuatrimestre = cuatrimestre;
         this.anioCarrera = anioCarrera;
         this.turno = turno;
