@@ -45,7 +45,7 @@ public class MateriaService {
     }
 
     public List<Materia> findAll() {
-        return materiaRepository.findAllByOrderByNombreAsc();
+        return materiaRepository.findAll();
     }
 
     public void delete(Long id) {

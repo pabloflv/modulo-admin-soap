@@ -1,11 +1,13 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriaFindAllOk;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriaOk;
+import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriasInscriptasOK;
 import ar.com.unla.api.services.UsuarioMateriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -99,6 +101,34 @@ public class UsuarioMateriaController {
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long idMateria) {
         return new ApplicationResponse<>(usuarioMateriaService.findUsersBySubject(idMateria), null);
+    }
+
+    @GetMapping(path = "/materias-inscriptas", params = {"idUsuario"})
+    @ApiOperation(value = "Se encarga de traer una lista de materias con un flag que indique en "
+            + "cual esta inscripta el usuario")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message =
+                            "Materias con flag de inscripción por usuario"
+                                    + "encontradas",
+                            response =
+                                    SwaggerUsuarioMateriasInscriptasOK.class),
+                    @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
+                            + " materias con flag de inscripción por usuario", response =
+                            ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al buscar una lista de materias con flag de "
+                                    + "inscripción por usuario",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<List<MateriasInscriptasDTO>> getSubjectsWithInscriptionFlag(
+            @RequestParam(name = "idUsuario")
+            @NotNull(message = "El parámetro idUsuario no esta informado.")
+            @ApiParam(required = true) Long idUsuario) {
+        return new ApplicationResponse<>(
+                usuarioMateriaService.findSubjectsWithInscriptionFlag(idUsuario), null);
     }
 
     @GetMapping(path = "/materias", params = {"idUsuario"})
