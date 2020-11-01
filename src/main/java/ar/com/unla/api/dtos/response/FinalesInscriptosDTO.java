@@ -26,4 +26,7 @@ public class FinalesInscriptosDTO {
 
     @ApiModelProperty(notes = "inscripto", position = 4)
     private boolean inscripto;
+
+    @ApiModelProperty(notes = "recordatorio", position = 5)
+    private boolean recordatorio;
 }

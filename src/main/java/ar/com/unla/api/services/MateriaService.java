@@ -5,6 +5,7 @@ import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.database.Turno;
+import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.repositories.MateriaRepository;
 import ar.com.unla.api.utils.MateriaPDFExporter;
 import java.io.IOException;
@@ -23,6 +24,9 @@ public class MateriaService {
     private TurnoService turnoService;
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
     private PeriodoInscripcionService periodoInscripcionService;
 
     public Materia create(MateriaDTO materiaDTO) {
@@ -32,8 +36,11 @@ public class MateriaService {
 
         Turno turno = turnoService.findById(materiaDTO.getIdTurno());
 
-        Materia materia = new Materia(materiaDTO.getDescripcion(), materiaDTO.getCuatrimestre(),
-                materiaDTO.getAnioCarrera(), turno, inscripcionMateria);
+        Usuario profesor = usuarioService.findById(materiaDTO.getIdProfesor());
+
+        Materia materia =
+                new Materia(materiaDTO.getNombre(), profesor, materiaDTO.getCuatrimestre(),
+                        materiaDTO.getAnioCarrera(), turno, inscripcionMateria);
 
         return materiaRepository.save(materia);
     }

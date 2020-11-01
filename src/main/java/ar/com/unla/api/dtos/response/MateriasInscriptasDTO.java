@@ -3,6 +3,7 @@ package ar.com.unla.api.dtos.response;
 import ar.com.unla.api.models.database.HorarioMateria;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.database.Turno;
+import ar.com.unla.api.models.database.Usuario;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,27 +18,33 @@ public class MateriasInscriptasDTO {
 
     private Long id;
 
-
     @ApiModelProperty(notes = "nombre", example = "Sistemas distribuidos",
             position = 1)
     private String nombre;
 
-    @ApiModelProperty(notes = "cuatrimestre", example = "1", position = 2)
+    @ApiModelProperty(notes = "profesor", example = "Raul Gonzales",
+            position = 2)
+    private Usuario profesor;
+
+    @ApiModelProperty(notes = "cuatrimestre", example = "1", position = 3)
     private Integer cuatrimestre;
 
 
-    @ApiModelProperty(notes = "anio", example = "2020", position = 3)
+    @ApiModelProperty(notes = "anio", example = "2020", position = 4)
     private Integer anioCarrera;
 
-    @ApiModelProperty(notes = "turno", position = 4)
+    @ApiModelProperty(notes = "turno", position = 5)
     private Turno turno;
 
-    @ApiModelProperty(notes = "periodoInscripcion", position = 5)
+    @ApiModelProperty(notes = "periodoInscripcion", position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
-    @ApiModelProperty(notes = "horarios", position = 6)
+    @ApiModelProperty(notes = "horarios", position = 7)
     private Set<HorarioMateria> horarios = new HashSet<>();
 
-    @ApiModelProperty(notes = "inscripto", position = 7)
+    @ApiModelProperty(notes = "inscripto", position = 8)
     private boolean inscripto;
+
+    @ApiModelProperty(notes = "recordatorio", position = 9)
+    private boolean recordatorio;
 }

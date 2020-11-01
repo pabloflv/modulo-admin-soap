@@ -64,14 +64,15 @@ public class UsuarioMateriaService {
 
             MateriasInscriptasDTO inscriptedSubjects
                     = new MateriasInscriptasDTO(
-                    materia.getId(), materia.getNombre(),
+                    materia.getId(), materia.getNombre(), materia.getProfesor(),
                     materia.getCuatrimestre(), materia.getAnioCarrera(),
                     materia.getTurno(), materia.getPeriodoInscripcion(),
-                    materia.getHorarios(), false);
+                    materia.getHorarios(), false, false);
 
             for (UsuarioMateria usuarioMateria : subjectsByUser) {
                 if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
                     inscriptedSubjects.setInscripto(true);
+                    inscriptedSubjects.setRecordatorio(usuarioMateria.getRecordatorio());
                     break;
                 }
             }

@@ -66,11 +66,12 @@ public class UsuarioExamenFinalService {
                     = new FinalesInscriptosDTO(
                     examenFinal.getId(), examenFinal.getFecha(),
                     examenFinal.getMateria(), examenFinal.getPeriodoInscripcion()
-                    , false);
+                    , false, false);
 
             for (UsuarioExamenFinal usuarioFinal : finalsByUser) {
                 if (usuarioFinal.getExamenFinal().getId().equals(examenFinal.getId())) {
                     inscriptedFinal.setInscripto(true);
+                    inscriptedFinal.setRecordatorio(usuarioFinal.getRecordatorio());
                     break;
                 }
             }
