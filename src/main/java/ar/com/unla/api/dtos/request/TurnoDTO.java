@@ -1,4 +1,4 @@
-package ar.com.unla.api.dtos;
+package ar.com.unla.api.dtos.request;
 
 import ar.com.unla.api.constants.CommonsErrorConstants;
 import javax.validation.constraints.NotBlank;

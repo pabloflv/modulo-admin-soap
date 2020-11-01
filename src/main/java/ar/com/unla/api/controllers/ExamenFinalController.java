@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.ExamenFinalDTO;
+import ar.com.unla.api.dtos.request.ExamenFinalDTO;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Examen final controller", description = "CRUD examen final")
 @Validated
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/finales")
 public class ExamenFinalController {
 

@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.PeriodoInscripcionDTO;
+import ar.com.unla.api.dtos.request.PeriodoInscripcionDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.repositories.PeriodoInscripcionRepository;

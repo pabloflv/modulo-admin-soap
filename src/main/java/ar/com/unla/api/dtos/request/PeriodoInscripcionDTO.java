@@ -1,4 +1,4 @@
-package ar.com.unla.api.dtos;
+package ar.com.unla.api.dtos.request;
 
 import ar.com.unla.api.constants.CommonsErrorConstants;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,19 +12,24 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Data
 @NoArgsConstructor
-public class ExamenFinalDTO {
+public class PeriodoInscripcionDTO {
+
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @Future(message = CommonsErrorConstants.FUTURE_DATE_ERROR_MESSAGE)
     @DateTimeFormat(iso = ISO.DATE, pattern = "uuuu-MM-dd")
     @ApiModelProperty(required = true, position = 1)
-    private LocalDate fecha;
+    private LocalDate fechaDesde;
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
+    @Future(message = CommonsErrorConstants.FUTURE_DATE_ERROR_MESSAGE)
+    @DateTimeFormat(iso = ISO.DATE, pattern = "uuuu-MM-dd")
     @ApiModelProperty(required = true, position = 2)
-    private Long idMateria;
+    private LocalDate fechaHasta;
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
+    @Future(message = CommonsErrorConstants.FUTURE_DATE_ERROR_MESSAGE)
+    @DateTimeFormat(iso = ISO.DATE, pattern = "uuuu-MM-dd")
     @ApiModelProperty(required = true, position = 3)
-    private Long idPeriodoInscripcion;
+    private LocalDate fechaLimiteNota;
 }

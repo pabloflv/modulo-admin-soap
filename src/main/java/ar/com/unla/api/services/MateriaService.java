@@ -1,6 +1,6 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.MateriaDTO;
+import ar.com.unla.api.dtos.request.MateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
@@ -45,7 +45,7 @@ public class MateriaService {
     }
 
     public List<Materia> findAll() {
-        return materiaRepository.findAllByOrderByNombreAsc();
+        return materiaRepository.findAll();
     }
 
     public void delete(Long id) {

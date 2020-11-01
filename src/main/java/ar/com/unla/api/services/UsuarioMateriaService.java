@@ -1,11 +1,13 @@
 package ar.com.unla.api.services;
 
-import ar.com.unla.api.dtos.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.repositories.UsuarioMateriaRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +52,32 @@ public class UsuarioMateriaService {
     public List<UsuarioMateria> findSubjectsByUser(Long idUsuario) {
         usuarioService.findById(idUsuario);
         return usuarioMateriaRepository.findSubjectsByUser(idUsuario);
+    }
+
+    public List<MateriasInscriptasDTO> findSubjectsWithInscriptionFlag(Long idUsuario) {
+        List<UsuarioMateria> subjectsByUser = findSubjectsByUser(idUsuario);
+        List<Materia> allSubjects = materiaService.findAll();
+
+        List<MateriasInscriptasDTO> subjectsWithInscriptionFlag = new ArrayList<>();
+
+        for (Materia materia : allSubjects) {
+
+            MateriasInscriptasDTO inscriptedSubjects
+                    = new MateriasInscriptasDTO(
+                    materia.getId(), materia.getNombre(),
+                    materia.getCuatrimestre(), materia.getAnioCarrera(),
+                    materia.getTurno(), materia.getPeriodoInscripcion(),
+                    materia.getHorarios(), false);
+
+            for (UsuarioMateria usuarioMateria : subjectsByUser) {
+                if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
+                    inscriptedSubjects.setInscripto(true);
+                    break;
+                }
+            }
+            subjectsWithInscriptionFlag.add(inscriptedSubjects);
+        }
+        return subjectsWithInscriptionFlag;
     }
 
     public void delete(Long id) {

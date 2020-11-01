@@ -1,6 +1,6 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.UsuarioDTO;
+import ar.com.unla.api.dtos.request.UsuarioDTO;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
@@ -29,9 +29,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "Usuario controller", description = "CRUD usuario")
-@CrossOrigin(origins = "*")
-@RestController
 @Validated
+@RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/usuarios")
 public class UsuarioController {
 

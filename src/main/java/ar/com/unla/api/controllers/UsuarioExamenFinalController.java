@@ -1,9 +1,11 @@
 package ar.com.unla.api.controllers;
 
-import ar.com.unla.api.dtos.UsuarioExamenFinalDTO;
+import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
+import ar.com.unla.api.dtos.response.FinalesInscriptosDTO;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
+import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioExamenFinalInscriptoOK;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalFindAllOk;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
 import ar.com.unla.api.services.UsuarioExamenFinalService;
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Usuario-ExamenFinal controller", description = "CRUD UsuarioExamenFinal")
 @Validated
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/usuarios-examenes-finales")
 public class UsuarioExamenFinalController {
 
@@ -116,12 +120,44 @@ public class UsuarioExamenFinalController {
                             response = ErrorResponse.class)
             }
     )
+
+    //TODO://lista de usuarios pertenecientes a una materia de rol alumno
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<UsuarioExamenFinal>> getFinalExamsByUser(
             @RequestParam(name = "idUsuario")
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long idUsuario) {
         return new ApplicationResponse<>(usuarioExamenFinalService.findFinalExamsByUser(idUsuario),
+                null);
+    }
+
+    @GetMapping(path = "/finales-inscriptos", params = {"idUsuario"})
+    @ApiOperation(value = "Se encarga de buscar una lista de examenes finales relacionados con un"
+            + " flag indicando si el usuario esta inscripto")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message =
+                            "Examenes finales con flag de inscripción por usuario"
+                                    + "encontrados",
+                            response =
+                                    SwaggerUsuarioExamenFinalInscriptoOK.class),
+                    @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
+                            + " examenes finales con flag de inscripción por usuario", response =
+                            ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al buscar una lista de examenes finales con flag de "
+                                    + "inscripción por usuario",
+                            response = ErrorResponse.class)
+            }
+    )
+
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<List<FinalesInscriptosDTO>> getFinalsWithInscriptionFlag(
+            @RequestParam(name = "idUsuario")
+            @NotNull(message = "El parámetro idUsuario no esta informado.")
+            @ApiParam(required = true) Long idUsuario) {
+        return new ApplicationResponse<>(
+                usuarioExamenFinalService.findFinalsWithInscriptionFlag(idUsuario),
                 null);
     }
 
