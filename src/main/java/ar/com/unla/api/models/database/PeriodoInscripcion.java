@@ -1,7 +1,5 @@
 package ar.com.unla.api.models.database;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
@@ -18,7 +16,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class PeriodoInscripcion {
 
     @Id

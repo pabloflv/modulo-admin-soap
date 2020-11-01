@@ -1,7 +1,5 @@
 package ar.com.unla.api.models.database;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.CascadeType;
@@ -20,7 +18,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class HorarioMateria {
 
     @Id
@@ -42,7 +39,7 @@ public class HorarioMateria {
     private String horaHasta;
 
     @Column(nullable = false)
-    @ApiModelProperty(notes = "horaDesde", required = true, example = "miercoles", position = 4)
+    @ApiModelProperty(notes = "dia", required = true, example = "miercoles", position = 4)
     private String dia;
 
     public HorarioMateria() {
