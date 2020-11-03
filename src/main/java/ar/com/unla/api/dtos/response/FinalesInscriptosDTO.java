@@ -29,4 +29,7 @@ public class FinalesInscriptosDTO {
 
     @ApiModelProperty(notes = "recordatorio", position = 5)
     private boolean recordatorio;
+
+    @ApiModelProperty(notes = "idInscripcion", position = 9)
+    private Long idInscripcion;
 }

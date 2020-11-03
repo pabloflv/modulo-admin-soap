@@ -44,4 +44,7 @@ public class MateriasInscriptasDTO {
 
     @ApiModelProperty(notes = "inscripto", position = 8)
     private boolean inscripto;
+
+    @ApiModelProperty(notes = "idInscripcion", position = 9)
+    private Long idInscripcion;
 }

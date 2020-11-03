@@ -51,6 +51,7 @@ public class Usuario {
     @ApiModelProperty(notes = "direccion", required = true, position = 6)
     private Direccion direccion;
 
+    //@JsonProperty(access = Access.WRITE_ONLY)
     @Column(nullable = false)
     @ApiModelProperty(notes = "password", required = true, position = 7)
     private String password;
