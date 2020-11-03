@@ -34,10 +34,6 @@ public class UsuarioService {
                 rol);
 
         return usuarioRepository.save(usuario);
-        /*
-        Tener en cuenta para todos los create
-        return Optional.of(usuarioRepository.save(usuario))
-                .orElseThrow(RuntimeException::new);*/
     }
 
     public Usuario findById(Long id) {
