@@ -39,21 +39,15 @@ public class UsuarioMateria {
     private Usuario usuario;
 
     @Column(nullable = false)
-    @ApiModelProperty(notes = "recordatorio", required = true, position = 3)
-    private Boolean recordatorio;
-
-    @Column(nullable = false)
     @ApiModelProperty(notes = "calificacion", required = true, position = 4)
     private float calificacion;
 
     public UsuarioMateria() {
     }
 
-    public UsuarioMateria(Materia materia, Usuario usuario, Boolean recordatorio,
-            float calificacion) {
+    public UsuarioMateria(Materia materia, Usuario usuario, float calificacion) {
         this.materia = materia;
         this.usuario = usuario;
-        this.recordatorio = recordatorio;
         this.calificacion = calificacion;
     }
 }

@@ -1,6 +1,6 @@
 package ar.com.unla.api.dtos.response;
 
-import ar.com.unla.api.models.database.HorarioMateria;
+import ar.com.unla.api.models.database.DiaSemana;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.database.Turno;
 import ar.com.unla.api.models.database.Usuario;
@@ -40,11 +40,8 @@ public class MateriasInscriptasDTO {
     private PeriodoInscripcion periodoInscripcion;
 
     @ApiModelProperty(notes = "horarios", position = 7)
-    private Set<HorarioMateria> horarios = new HashSet<>();
+    private Set<DiaSemana> horarios = new HashSet<>();
 
     @ApiModelProperty(notes = "inscripto", position = 8)
     private boolean inscripto;
-
-    @ApiModelProperty(notes = "recordatorio", position = 9)
-    private boolean recordatorio;
 }

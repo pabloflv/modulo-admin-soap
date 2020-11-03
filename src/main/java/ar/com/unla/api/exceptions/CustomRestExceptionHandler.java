@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class CustomRestExceptionHandler extends RestExceptionHandler {
 
     @ExceptionHandler({
-            NotFoundApiException.class
+            NotFoundApiException.class,
+            HorarioMateriaAlreadyOwnedException.class,
+            HorarioMateriaNotOwnedException.class
     })
     protected ResponseEntity<ApplicationResponse<Object>> handleValidationOkResponseExceptions(
             GeneralApiException generalApiException) {

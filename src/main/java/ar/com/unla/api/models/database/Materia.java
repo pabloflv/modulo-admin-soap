@@ -1,5 +1,8 @@
 package ar.com.unla.api.models.database;
 
+import ar.com.unla.api.constants.CommonsErrorConstants;
+import ar.com.unla.api.exceptions.HorarioMateriaAlreadyOwnedException;
+import ar.com.unla.api.exceptions.HorarioMateriaNotOwnedException;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
@@ -14,8 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,11 +63,10 @@ public class Materia {
     @ApiModelProperty(notes = "periodoInscripcion", position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "materia", cascade = {CascadeType.MERGE,
-            CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty(notes = "horarios", position = 7)
-    private Set<HorarioMateria> horarios = new HashSet<>();
+    @ApiModelProperty(notes = "dias", position = 7)
+    private Set<DiaSemana> dias = new HashSet<>();
 
     public Materia() {
     }
@@ -77,5 +79,23 @@ public class Materia {
         this.anioCarrera = anioCarrera;
         this.turno = turno;
         this.periodoInscripcion = periodoInscripcion;
+    }
+
+    public void addDay(DiaSemana diaSemana)
+            throws HorarioMateriaAlreadyOwnedException {
+        if (dias.contains(diaSemana)) {
+            throw new HorarioMateriaAlreadyOwnedException(
+                    CommonsErrorConstants.ALREADY_OWNED_ERROR_MESSAGE);
+        }
+        dias.add(diaSemana);
+    }
+
+    public void removeDay(DiaSemana diaSemana)
+            throws HorarioMateriaNotOwnedException {
+        if (!dias.contains(diaSemana)) {
+            throw new HorarioMateriaNotOwnedException(
+                    CommonsErrorConstants.NOT_OWNED_ERROR_MESSAGE);
+        }
+        dias.remove(diaSemana);
     }
 }

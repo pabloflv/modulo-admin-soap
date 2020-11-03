@@ -43,7 +43,8 @@ public class ExamenFinal {
     public ExamenFinal() {
     }
 
-    public ExamenFinal(LocalDate fecha, Materia materia, PeriodoInscripcion periodoInscripcion) {
+    public ExamenFinal(LocalDate fecha, Materia materia,
+            PeriodoInscripcion periodoInscripcion) {
         this.fecha = fecha;
         this.materia = materia;
         this.periodoInscripcion = periodoInscripcion;

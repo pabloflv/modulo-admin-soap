@@ -30,7 +30,7 @@ public class UsuarioExamenFinalDTO {
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @Digits(integer = 2, fraction = 2, message = CommonsErrorConstants.QUALIFICATION_VALUE_ERROR)
     @Max(value = 10, message = CommonsErrorConstants.MAX_VALUE_ERROR)
-    @Min(value = 1, message = CommonsErrorConstants.MIN_VALUE_ERROR)
+    @Min(value = 0, message = CommonsErrorConstants.MIN_VALUE_ERROR)
     @ApiModelProperty(required = true, position = 4)
     private float calificacion;
 }

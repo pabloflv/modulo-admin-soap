@@ -1,6 +1,6 @@
 package ar.com.unla.api.models.swagger.horariomateria;
 
-import ar.com.unla.api.models.database.HorarioMateria;
+import ar.com.unla.api.models.database.DiaSemana;
 import java.util.List;
 import lombok.Data;
 
@@ -10,6 +10,6 @@ import lombok.Data;
 @Data
 public final class SwaggerHorarioMateriaFindAllOk {
 
-    private List<HorarioMateria> data;
+    private List<DiaSemana> data;
 
 }

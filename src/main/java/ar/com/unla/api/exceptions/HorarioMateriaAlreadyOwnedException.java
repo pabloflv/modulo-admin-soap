@@ -3,19 +3,15 @@ package ar.com.unla.api.exceptions;
 import ar.com.unla.api.constants.CommonsErrorConstants;
 import org.springframework.http.HttpStatus;
 
-public class NotFoundApiException extends GeneralApiException {
+public class HorarioMateriaAlreadyOwnedException extends GeneralApiException {
 
-    public NotFoundApiException() {
-        super();
-    }
-
-    public NotFoundApiException(String message) {
+    public HorarioMateriaAlreadyOwnedException(String message) {
         super(message);
     }
 
     @Override
     public String getErrorCode() {
-        return CommonsErrorConstants.SEARCH_NOT_FOUND_ERROR_CODE;
+        return CommonsErrorConstants.ALREADY_OWNED_ERROR_CODE;
     }
 
     @Override
