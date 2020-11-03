@@ -31,8 +31,8 @@ public class UsuarioMateriaService {
 
         Usuario usuario = usuarioService.findById(usuarioMateriaDTO.getIdUsuario());
 
-        UsuarioMateria usuarioMateria = new UsuarioMateria(materia, usuario,
-                usuarioMateriaDTO.getRecordatorio(), usuarioMateriaDTO.getCalificacion());
+        UsuarioMateria usuarioMateria =
+                new UsuarioMateria(materia, usuario, usuarioMateriaDTO.getCalificacion());
 
         return usuarioMateriaRepository.save(usuarioMateria);
     }
@@ -72,7 +72,6 @@ public class UsuarioMateriaService {
             for (UsuarioMateria usuarioMateria : subjectsByUser) {
                 if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
                     inscriptedSubjects.setInscripto(true);
-                    inscriptedSubjects.setRecordatorio(usuarioMateria.getRecordatorio());
                     break;
                 }
             }
