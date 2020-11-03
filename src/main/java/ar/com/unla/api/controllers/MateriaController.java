@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -95,6 +96,54 @@ public class MateriaController {
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<Materia>> findAll() {
         return new ApplicationResponse<>(materiaService.findAll(), null);
+    }
+
+    @PutMapping(path = "/agregar-horario")
+    @ApiOperation(value = "Se encarga de agregar un horario a una materia especifica")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Horario agregado correctamente", response =
+                            SwaggerMateriaFindAllOk.class),
+                    @ApiResponse(code = 400, message = "Request incorrecta al intentar agregar un"
+                            + " horario a la materia", response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al agregar un horario",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<Materia> addHourHand(
+            @RequestParam(name = "idMateria")
+            @NotNull(message = "El parámetro idMateria no esta informado.")
+            @ApiParam(required = true) Long idMateria,
+            @RequestParam(name = "idHorario")
+            @NotNull(message = "El parámetro idHorario no esta informado.")
+            @ApiParam(required = true) Long idHorario) {
+        return new ApplicationResponse<>(materiaService.addHourHand(idMateria, idHorario), null);
+    }
+
+    @PutMapping(path = "/remover-horario")
+    @ApiOperation(value = "Se encarga de remover un horario de una materia especifica")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Horario removido correctamente", response =
+                            SwaggerMateriaFindAllOk.class),
+                    @ApiResponse(code = 400, message = "Request incorrecta al intentar remover un"
+                            + " horario a la materia", response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al remover un horario",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<Materia> removeHourHand(
+            @RequestParam(name = "idMateria")
+            @NotNull(message = "El parámetro idMateria no esta informado.")
+            @ApiParam(required = true) Long idMateria,
+            @RequestParam(name = "idHorario")
+            @NotNull(message = "El parámetro idHorario no esta informado.")
+            @ApiParam(required = true) Long idHorario) {
+        return new ApplicationResponse<>(materiaService.removeHourHand(idMateria, idHorario), null);
     }
 
     @DeleteMapping(params = {"idMateria"})

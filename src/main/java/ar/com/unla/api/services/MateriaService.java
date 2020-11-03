@@ -2,6 +2,7 @@ package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.MateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
+import ar.com.unla.api.models.database.HorarioMateria;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.database.Turno;
@@ -27,6 +28,9 @@ public class MateriaService {
     private UsuarioService usuarioService;
 
     @Autowired
+    private HorarioMateriaService horarioMateriaService;
+
+    @Autowired
     private PeriodoInscripcionService periodoInscripcionService;
 
     public Materia create(MateriaDTO materiaDTO) {
@@ -49,6 +53,20 @@ public class MateriaService {
         return materiaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundApiException(
                         "Id de materia incorrecto. No se encontro la materia indicada."));
+    }
+
+    public Materia addHourHand(Long idMateria, Long idHorario) {
+        Materia materia = findById(idMateria);
+        HorarioMateria horarioMateria = horarioMateriaService.findById(idHorario);
+        materia.addHourHand(horarioMateria);
+        return materiaRepository.save(materia);
+    }
+
+    public Materia removeHourHand(Long idMateria, Long idHorario) {
+        Materia materia = findById(idMateria);
+        HorarioMateria horarioMateria = horarioMateriaService.findById(idHorario);
+        materia.removeHourHand(horarioMateria);
+        return materiaRepository.save(materia);
     }
 
     public List<Materia> findAll() {

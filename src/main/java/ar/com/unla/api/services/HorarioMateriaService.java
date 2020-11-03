@@ -3,7 +3,6 @@ package ar.com.unla.api.services;
 import ar.com.unla.api.dtos.request.HorarioMateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.HorarioMateria;
-import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.repositories.HorarioMateriaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,8 @@ public class HorarioMateriaService {
 
     public HorarioMateria create(HorarioMateriaDTO horarioMateriaDTO) {
 
-        Materia materia = materiaService.findById(horarioMateriaDTO.getIdMateria());
         HorarioMateria horarioMateria =
-                new HorarioMateria(materia,
+                new HorarioMateria(
                         horarioMateriaDTO.getHoraDesde(),
                         horarioMateriaDTO.getHoraHasta(),
                         horarioMateriaDTO.getDia());

@@ -1,5 +1,8 @@
 package ar.com.unla.api.models.database;
 
+import ar.com.unla.api.constants.CommonsErrorConstants;
+import ar.com.unla.api.exceptions.HorarioMateriaAlreadyOwnedException;
+import ar.com.unla.api.exceptions.HorarioMateriaNotOwnedException;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
@@ -30,6 +33,7 @@ public class Materia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
+
     private Long id;
 
     @Column(nullable = false)
@@ -60,8 +64,7 @@ public class Materia {
     @ApiModelProperty(notes = "periodoInscripcion", position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "materia", cascade = {CascadeType.MERGE,
-            CascadeType.REFRESH})
+    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @Setter(AccessLevel.NONE)
     @ApiModelProperty(notes = "horarios", position = 7)
     private Set<HorarioMateria> horarios = new HashSet<>();
@@ -77,5 +80,23 @@ public class Materia {
         this.anioCarrera = anioCarrera;
         this.turno = turno;
         this.periodoInscripcion = periodoInscripcion;
+    }
+
+    public void addHourHand(HorarioMateria horarioMateria)
+            throws HorarioMateriaAlreadyOwnedException {
+        if (horarios.contains(horarioMateria)) {
+            throw new HorarioMateriaAlreadyOwnedException(
+                    CommonsErrorConstants.ALREADY_OWNED_ERROR_MESSAGE);
+        }
+        horarios.add(horarioMateria);
+    }
+
+    public void removeHourHand(HorarioMateria horarioMateria)
+            throws HorarioMateriaNotOwnedException {
+        if (!horarios.contains(horarioMateria)) {
+            throw new HorarioMateriaNotOwnedException(
+                    CommonsErrorConstants.NOT_OWNED_ERROR_MESSAGE);
+        }
+        horarios.remove(horarioMateria);
     }
 }

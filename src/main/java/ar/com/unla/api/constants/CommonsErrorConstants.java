@@ -58,6 +58,16 @@ public final class CommonsErrorConstants {
 
     public static final String SEARCH_NOT_FOUND_ERROR_CODE = "UNLA-ERR-008";
 
+    public static final String ALREADY_OWNED_ERROR_CODE = "UNLA-ERR-009";
+
+    public static final String ALREADY_OWNED_ERROR_MESSAGE =
+            "El horario que desea agregar ya existe en la materia";
+
+    public static final String NOT_OWNED_ERROR_CODE = "UNLA-ERR-010";
+
+    public static final String NOT_OWNED_ERROR_MESSAGE =
+            "El horario que desea borrar no existe en esta materia";
+
     public static final String LOG_ERROR_MESSAGE = "Messages: {}. Stacktrace: ";
 
     public static final String LOG_VALIDATION_MESSAGE = "Exception: {}. Messages: {}";

@@ -2,15 +2,13 @@ package ar.com.unla.api.models.database;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel
+@EqualsAndHashCode
 public class HorarioMateria {
 
     @Id
@@ -25,28 +24,25 @@ public class HorarioMateria {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "idMateria")
-    @ApiModelProperty(notes = "materia", required = true, position = 1)
-    private Materia materia;
-
     @Column(nullable = false)
+    @EqualsAndHashCode.Exclude
     @ApiModelProperty(notes = "horaDesde", required = true, example = "16:00", position = 2)
     private String horaDesde;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Exclude
     @ApiModelProperty(notes = "horaHasta", required = true, example = "21:00", position = 3)
     private String horaHasta;
 
     @Column(nullable = false)
+    @EqualsAndHashCode.Exclude
     @ApiModelProperty(notes = "dia", required = true, example = "miercoles", position = 4)
     private String dia;
 
     public HorarioMateria() {
     }
 
-    public HorarioMateria(Materia materia, String horaDesde, String horaHasta, String dia) {
-        this.materia = materia;
+    public HorarioMateria(/*Materia materia,*/ String horaDesde, String horaHasta, String dia) {
         this.horaDesde = horaDesde;
         this.horaHasta = horaHasta;
         this.dia = dia;
