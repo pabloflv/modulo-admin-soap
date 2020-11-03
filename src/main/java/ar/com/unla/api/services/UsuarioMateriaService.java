@@ -7,8 +7,10 @@ import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.repositories.UsuarioMateriaRepository;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +69,7 @@ public class UsuarioMateriaService {
                     materia.getId(), materia.getNombre(), materia.getProfesor(),
                     materia.getCuatrimestre(), materia.getAnioCarrera(),
                     materia.getTurno(), materia.getPeriodoInscripcion(),
-                    materia.getDias(), false, false);
+                    materia.getDias(), false);
 
             for (UsuarioMateria usuarioMateria : subjectsByUser) {
                 if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
@@ -77,6 +79,17 @@ public class UsuarioMateriaService {
             }
             subjectsWithInscriptionFlag.add(inscriptedSubjects);
         }
+
+        subjectsWithInscriptionFlag = subjectsWithInscriptionFlag.stream()
+                .filter(materia ->
+                        (materia.isInscripto()) ||
+                                (materia.getPeriodoInscripcion().getFechaHasta()
+                                        .isAfter(LocalDate.now())
+                                        && !materia.isInscripto()) ||
+                                (materia.getPeriodoInscripcion().getFechaHasta()
+                                        .equals(LocalDate.now()) && !materia.isInscripto())
+                )
+                .collect(Collectors.toList());
         return subjectsWithInscriptionFlag;
     }
 

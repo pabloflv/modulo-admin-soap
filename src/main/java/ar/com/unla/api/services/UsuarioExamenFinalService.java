@@ -7,8 +7,10 @@ import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.repositories.UsuarioExamenFinalRepository;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,6 +79,18 @@ public class UsuarioExamenFinalService {
             }
             finalsWithInscriptionFlag.add(inscriptedFinal);
         }
+
+        finalsWithInscriptionFlag = finalsWithInscriptionFlag.stream()
+                .filter(finales ->
+                        (finales.isInscripto()) ||
+                                (finales.getPeriodoInscripcion().getFechaHasta()
+                                        .isAfter(LocalDate.now())
+                                        && !finales.isInscripto()) ||
+                                (finales.getPeriodoInscripcion().getFechaHasta()
+                                        .equals(LocalDate.now()) && !finales.isInscripto())
+                )
+                .collect(Collectors.toList());
+
         return finalsWithInscriptionFlag;
     }
 

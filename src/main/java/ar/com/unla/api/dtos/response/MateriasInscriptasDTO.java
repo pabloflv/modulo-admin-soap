@@ -44,7 +44,4 @@ public class MateriasInscriptasDTO {
 
     @ApiModelProperty(notes = "inscripto", position = 8)
     private boolean inscripto;
-
-    @ApiModelProperty(notes = "recordatorio", position = 9)
-    private boolean recordatorio;
 }
