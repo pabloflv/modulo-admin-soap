@@ -98,52 +98,52 @@ public class MateriaController {
         return new ApplicationResponse<>(materiaService.findAll(), null);
     }
 
-    @PutMapping(path = "/agregar-horario")
-    @ApiOperation(value = "Se encarga de agregar un horario a una materia especifica")
+    @PutMapping(path = "/agregar-dia")
+    @ApiOperation(value = "Se encarga de agregar un día a una materia especifica")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Horario agregado correctamente", response =
+                    @ApiResponse(code = 200, message = "Día agregado correctamente", response =
                             SwaggerMateriaFindAllOk.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al intentar agregar un"
-                            + " horario a la materia", response = ErrorResponse.class),
+                            + " día a la materia", response = ErrorResponse.class),
                     @ApiResponse(code = 500, message =
-                            "Error interno al agregar un horario",
+                            "Error interno al agregar un día a la materia",
                             response = ErrorResponse.class)
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<Materia> addHourHand(
+    public ApplicationResponse<Materia> addDay(
             @RequestParam(name = "idMateria")
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long idMateria,
-            @RequestParam(name = "idHorario")
-            @NotNull(message = "El parámetro idHorario no esta informado.")
-            @ApiParam(required = true) Long idHorario) {
-        return new ApplicationResponse<>(materiaService.addHourHand(idMateria, idHorario), null);
+            @RequestParam(name = "idDia")
+            @NotNull(message = "El parámetro idDia no esta informado.")
+            @ApiParam(required = true) Long idDia) {
+        return new ApplicationResponse<>(materiaService.addDay(idMateria, idDia), null);
     }
 
-    @PutMapping(path = "/remover-horario")
-    @ApiOperation(value = "Se encarga de remover un horario de una materia especifica")
+    @PutMapping(path = "/remover-dia")
+    @ApiOperation(value = "Se encarga de remover un día de una materia especifica")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Horario removido correctamente", response =
+                    @ApiResponse(code = 200, message = "Día removido correctamente", response =
                             SwaggerMateriaFindAllOk.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al intentar remover un"
-                            + " horario a la materia", response = ErrorResponse.class),
+                            + " día a la materia", response = ErrorResponse.class),
                     @ApiResponse(code = 500, message =
-                            "Error interno al remover un horario",
+                            "Error interno al remover un día a la materia",
                             response = ErrorResponse.class)
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<Materia> removeHourHand(
+    public ApplicationResponse<Materia> removeDay(
             @RequestParam(name = "idMateria")
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long idMateria,
-            @RequestParam(name = "idHorario")
-            @NotNull(message = "El parámetro idHorario no esta informado.")
-            @ApiParam(required = true) Long idHorario) {
-        return new ApplicationResponse<>(materiaService.removeHourHand(idMateria, idHorario), null);
+            @RequestParam(name = "idDia")
+            @NotNull(message = "El parámetro idDia no esta informado.")
+            @ApiParam(required = true) Long idDia) {
+        return new ApplicationResponse<>(materiaService.removeDay(idMateria, idDia), null);
     }
 
     @DeleteMapping(params = {"idMateria"})

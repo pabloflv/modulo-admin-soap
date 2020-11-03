@@ -17,8 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +33,6 @@ public class Materia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-
     private Long id;
 
     @Column(nullable = false)
@@ -64,10 +63,10 @@ public class Materia {
     @ApiModelProperty(notes = "periodoInscripcion", position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @Setter(AccessLevel.NONE)
-    @ApiModelProperty(notes = "horarios", position = 7)
-    private Set<HorarioMateria> horarios = new HashSet<>();
+    @ApiModelProperty(notes = "dias", position = 7)
+    private Set<DiaSemana> dias = new HashSet<>();
 
     public Materia() {
     }
@@ -82,21 +81,21 @@ public class Materia {
         this.periodoInscripcion = periodoInscripcion;
     }
 
-    public void addHourHand(HorarioMateria horarioMateria)
+    public void addDay(DiaSemana diaSemana)
             throws HorarioMateriaAlreadyOwnedException {
-        if (horarios.contains(horarioMateria)) {
+        if (dias.contains(diaSemana)) {
             throw new HorarioMateriaAlreadyOwnedException(
                     CommonsErrorConstants.ALREADY_OWNED_ERROR_MESSAGE);
         }
-        horarios.add(horarioMateria);
+        dias.add(diaSemana);
     }
 
-    public void removeHourHand(HorarioMateria horarioMateria)
+    public void removeDay(DiaSemana diaSemana)
             throws HorarioMateriaNotOwnedException {
-        if (!horarios.contains(horarioMateria)) {
+        if (!dias.contains(diaSemana)) {
             throw new HorarioMateriaNotOwnedException(
                     CommonsErrorConstants.NOT_OWNED_ERROR_MESSAGE);
         }
-        horarios.remove(horarioMateria);
+        dias.remove(diaSemana);
     }
 }

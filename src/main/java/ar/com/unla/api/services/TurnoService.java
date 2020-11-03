@@ -17,7 +17,8 @@ public class TurnoService {
 
     public Turno create(TurnoDTO turnoDTO) {
 
-        Turno turno = new Turno(turnoDTO.getDescripcion());
+        Turno turno = new Turno(turnoDTO.getDescripcion(), turnoDTO.getHoraDesde(),
+                turnoDTO.getHoraHasta());
 
         return turnoRepository.save(turno);
     }

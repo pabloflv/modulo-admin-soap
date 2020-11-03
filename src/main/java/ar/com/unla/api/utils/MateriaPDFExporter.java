@@ -1,6 +1,6 @@
 package ar.com.unla.api.utils;
 
-import ar.com.unla.api.models.database.HorarioMateria;
+import ar.com.unla.api.models.database.DiaSemana;
 import ar.com.unla.api.models.database.Materia;
 import com.lowagie.text.Document;
 import com.lowagie.text.Font;
@@ -86,11 +86,12 @@ public class MateriaPDFExporter {
 
             StringBuilder dias = new StringBuilder();
 
-            if (materia.getHorarios() != null && !materia.getHorarios().isEmpty()) {
-                for (HorarioMateria hm : materia.getHorarios()) {
+            if (materia.getDias() != null && !materia.getDias().isEmpty()) {
+                for (DiaSemana dia : materia.getDias()) {
                     String horarios =
-                            hm.getDia() + " - " + hm.getHoraDesde() + " " + hm.getHoraHasta()
-                                    + "\n";
+                            dia.getNombre() + " - " + materia.getTurno().getHoraDesde() + " "
+                                    + materia
+                                    .getTurno().getHoraHasta() + "\n";
                     dias.append(horarios);
                 }
             }
@@ -136,5 +137,4 @@ public class MateriaPDFExporter {
 
         document.close();
     }
-
 }

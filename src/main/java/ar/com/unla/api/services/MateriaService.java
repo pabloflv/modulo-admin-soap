@@ -2,7 +2,7 @@ package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.MateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
-import ar.com.unla.api.models.database.HorarioMateria;
+import ar.com.unla.api.models.database.DiaSemana;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.database.Turno;
@@ -28,7 +28,7 @@ public class MateriaService {
     private UsuarioService usuarioService;
 
     @Autowired
-    private HorarioMateriaService horarioMateriaService;
+    private DiaSemanaService diaSemanaService;
 
     @Autowired
     private PeriodoInscripcionService periodoInscripcionService;
@@ -55,17 +55,17 @@ public class MateriaService {
                         "Id de materia incorrecto. No se encontro la materia indicada."));
     }
 
-    public Materia addHourHand(Long idMateria, Long idHorario) {
+    public Materia addDay(Long idMateria, Long idDia) {
         Materia materia = findById(idMateria);
-        HorarioMateria horarioMateria = horarioMateriaService.findById(idHorario);
-        materia.addHourHand(horarioMateria);
+        DiaSemana diaSemana = diaSemanaService.findById(idDia);
+        materia.addDay(diaSemana);
         return materiaRepository.save(materia);
     }
 
-    public Materia removeHourHand(Long idMateria, Long idHorario) {
+    public Materia removeDay(Long idMateria, Long idDia) {
         Materia materia = findById(idMateria);
-        HorarioMateria horarioMateria = horarioMateriaService.findById(idHorario);
-        materia.removeHourHand(horarioMateria);
+        DiaSemana diaSemana = diaSemanaService.findById(idDia);
+        materia.removeDay(diaSemana);
         return materiaRepository.save(materia);
     }
 

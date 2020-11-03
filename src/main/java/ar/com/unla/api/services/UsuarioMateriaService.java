@@ -67,7 +67,7 @@ public class UsuarioMateriaService {
                     materia.getId(), materia.getNombre(), materia.getProfesor(),
                     materia.getCuatrimestre(), materia.getAnioCarrera(),
                     materia.getTurno(), materia.getPeriodoInscripcion(),
-                    materia.getHorarios(), false, false);
+                    materia.getDias(), false, false);
 
             for (UsuarioMateria usuarioMateria : subjectsByUser) {
                 if (usuarioMateria.getMateria().getId().equals(materia.getId())) {

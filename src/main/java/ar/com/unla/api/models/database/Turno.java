@@ -26,10 +26,20 @@ public class Turno {
     @ApiModelProperty(notes = "descripcion", required = true, example = "mañana", position = 1)
     private String descripcion;
 
+    @Column(nullable = false)
+    @ApiModelProperty(notes = "horaDesde", required = true, example = "16:00", position = 2)
+    private String horaDesde;
+
+    @Column(nullable = false)
+    @ApiModelProperty(notes = "horaHasta", required = true, example = "21:00", position = 3)
+    private String horaHasta;
+
     public Turno() {
     }
 
-    public Turno(String descripcion) {
+    public Turno(String descripcion, String horaDesde, String horaHasta) {
         this.descripcion = descripcion;
+        this.horaDesde = horaDesde;
+        this.horaHasta = horaHasta;
     }
 }

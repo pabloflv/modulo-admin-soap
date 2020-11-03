@@ -11,7 +11,7 @@ public interface MateriaRepository extends JpaRepository<Materia, Long> {
 
     List<Materia> findAllByOrderByNombreAsc();
 
-    @Query("SELECT m FROM Materia m INNER JOIN m.horarios h INNER JOIN m.periodoInscripcion pi "
+    @Query("SELECT m FROM Materia m INNER JOIN m.dias d INNER JOIN m.periodoInscripcion pi "
             + "INNER JOIN m.turno t WHERE t.id = :idTurno ORDER BY m.anioCarrera, m.cuatrimestre "
             + "ASC")
     List<Materia> findSubjectsForPDF(long idTurno);
