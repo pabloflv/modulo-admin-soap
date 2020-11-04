@@ -55,7 +55,7 @@ public class TurnoController {
         return new ApplicationResponse<>(turnoService.create(turnoDTO), null);
     }
 
-    @GetMapping(params = {"idTurno"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar un turno por su id")
     @ApiResponses(
             value = {
@@ -95,7 +95,7 @@ public class TurnoController {
         return new ApplicationResponse<>(turnoService.findAll(), null);
     }
 
-    @DeleteMapping(params = {"idTurno"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar un turno por su id")
     @ApiResponses(
             value = {

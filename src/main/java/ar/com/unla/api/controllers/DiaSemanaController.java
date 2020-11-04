@@ -56,7 +56,7 @@ public class DiaSemanaController {
         return new ApplicationResponse<>(diaSemanaService.create(diaSemanaDTO), null);
     }
 
-    @GetMapping(params = {"idDia"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar un día por su id")
     @ApiResponses(
             value = {
@@ -96,7 +96,7 @@ public class DiaSemanaController {
         return new ApplicationResponse<>(diaSemanaService.findAll(), null);
     }
 
-    @DeleteMapping(params = {"idDia"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar un día de la semana por su id")
     @ApiResponses(
             value = {

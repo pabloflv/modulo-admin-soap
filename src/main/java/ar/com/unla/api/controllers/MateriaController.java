@@ -58,7 +58,7 @@ public class MateriaController {
         return new ApplicationResponse<>(materiaService.create(materiaDTO), null);
     }
 
-    @GetMapping(params = {"idMateria"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar una materia por su id")
     @ApiResponses(
             value = {
@@ -146,7 +146,7 @@ public class MateriaController {
         return new ApplicationResponse<>(materiaService.removeDay(idMateria, idDia), null);
     }
 
-    @DeleteMapping(params = {"idMateria"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar una materia por su id")
     @ApiResponses(
             value = {

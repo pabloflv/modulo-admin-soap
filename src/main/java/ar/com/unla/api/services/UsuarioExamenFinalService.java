@@ -46,6 +46,12 @@ public class UsuarioExamenFinalService {
                                 + "indicado."));
     }
 
+    public UsuarioExamenFinal updateRemainder(Long id, Boolean recordatorio) {
+        UsuarioExamenFinal usuarioExamenFinal = findById(id);
+        usuarioExamenFinal.setRecordatorio(recordatorio);
+        return usuarioExamenFinalRepository.save(usuarioExamenFinal);
+    }
+
     public List<UsuarioExamenFinal> findUsersByFinalExam(Long idExamenFinal) {
         examenFinalService.findById(idExamenFinal);
         return usuarioExamenFinalRepository.findUsersByFinalExam(idExamenFinal);

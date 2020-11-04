@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -59,7 +60,7 @@ public class UsuarioExamenFinalController {
                 null);
     }
 
-    @GetMapping(params = {"idUsuarioExamenFinal"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar una relacion de usuario y examen final por su id")
     @ApiResponses(
             value = {
@@ -81,7 +82,7 @@ public class UsuarioExamenFinalController {
         return new ApplicationResponse<>(usuarioExamenFinalService.findById(id), null);
     }
 
-    @GetMapping(path = "/usuarios", params = {"idExamenFinal"})
+    @GetMapping(path = "/usuarios")
     @ApiOperation(value = "Se encarga de buscar una lista de usuarios relacionados a un examen "
             + "final")
     @ApiResponses(
@@ -105,7 +106,7 @@ public class UsuarioExamenFinalController {
                 usuarioExamenFinalService.findUsersByFinalExam(idExamenFinal), null);
     }
 
-    @GetMapping(path = "/finales", params = {"idUsuario"})
+    @GetMapping(path = "/finales")
     @ApiOperation(value = "Se encarga de buscar una lista de examenes finales relacionados a un "
             + "usuario")
     @ApiResponses(
@@ -131,7 +132,7 @@ public class UsuarioExamenFinalController {
                 null);
     }
 
-    @GetMapping(path = "/finales-inscriptos", params = {"idUsuario"})
+    @GetMapping(path = "/finales-inscriptos")
     @ApiOperation(value = "Se encarga de buscar una lista de examenes finales relacionados con un"
             + " flag indicando si el usuario esta inscripto")
     @ApiResponses(
@@ -161,7 +162,33 @@ public class UsuarioExamenFinalController {
                 null);
     }
 
-    @DeleteMapping(params = {"idUsuarioExamenFinal"})
+    @PutMapping(path = "/recordatorio")
+    @ApiOperation(value = "Se encarga de actualizar el recordatorio de un examen final")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Recordatorio actualizado", response =
+                            SwaggerUsuarioFinalOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar el recordatorio",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar el recordatorio",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<UsuarioExamenFinal> updateRemainder(
+            @RequestParam(name = "idUsuarioExamenFinal")
+            @NotNull(message = "El parámetro idUsuarioExamenFinal no esta informado.")
+            @ApiParam(required = true) Long id,
+            @RequestParam(name = "recordatorio")
+            @NotNull(message = "El parámetro recordatorio no esta informado.")
+            @ApiParam(required = true) Boolean recordatorio) {
+        return new ApplicationResponse<>(
+                usuarioExamenFinalService.updateRemainder(id, recordatorio), null);
+    }
+
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar una relacion de usuario y examen final por su id")
     @ApiResponses(
             value = {

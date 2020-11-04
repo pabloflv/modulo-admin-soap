@@ -55,7 +55,7 @@ public class RolController {
         return new ApplicationResponse<>(rolService.create(rolDTO), null);
     }
 
-    @GetMapping(params = {"idRol"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar un rol por su id")
     @ApiResponses(
             value = {
@@ -95,7 +95,7 @@ public class RolController {
         return new ApplicationResponse<>(rolService.findAll(), null);
     }
 
-    @DeleteMapping(params = {"idRol"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar un rol por su id")
     @ApiResponses(
             value = {
