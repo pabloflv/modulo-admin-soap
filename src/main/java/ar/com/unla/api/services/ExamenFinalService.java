@@ -20,16 +20,15 @@ public class ExamenFinalService {
     private ExamenFinalRepository examenFinalRepository;
 
     @Autowired
-    private PeriodoInscripcionService periodoInscripcionService;
-
-    @Autowired
     private MateriaService materiaService;
 
 
     public ExamenFinal create(ExamenFinalDTO examenFinalDTO) {
 
         PeriodoInscripcion inscripcionFinal =
-                periodoInscripcionService.findById(examenFinalDTO.getIdPeriodoInscripcion());
+                new PeriodoInscripcion(examenFinalDTO.getPeriodoInscripcion().getFechaDesde(),
+                        examenFinalDTO.getPeriodoInscripcion().getFechaHasta(),
+                        examenFinalDTO.getPeriodoInscripcion().getFechaLimiteNota());
 
         Materia materia = materiaService.findById(examenFinalDTO.getIdMateria());
 

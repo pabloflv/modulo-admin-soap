@@ -1,8 +1,5 @@
 package ar.com.unla.api.models.database;
 
-import ar.com.unla.api.constants.CommonsErrorConstants;
-import ar.com.unla.api.exceptions.HorarioMateriaAlreadyOwnedException;
-import ar.com.unla.api.exceptions.HorarioMateriaNotOwnedException;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
@@ -19,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -55,12 +53,13 @@ public class Materia {
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "idTurno")
-    @ApiModelProperty(notes = "turno", position = 5)
+    @ApiModelProperty(notes = "turno", required = true, position = 5)
     private Turno turno;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(optional = false, targetEntity = PeriodoInscripcion.class, cascade = {
+            CascadeType.ALL})
     @JoinColumn(name = "idPeriodoInscripcion")
-    @ApiModelProperty(notes = "periodoInscripcion", position = 6)
+    @ApiModelProperty(notes = "periodoInscripcion", required = true, position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
@@ -79,23 +78,5 @@ public class Materia {
         this.anioCarrera = anioCarrera;
         this.turno = turno;
         this.periodoInscripcion = periodoInscripcion;
-    }
-
-    public void addDay(DiaSemana diaSemana)
-            throws HorarioMateriaAlreadyOwnedException {
-        if (dias.contains(diaSemana)) {
-            throw new HorarioMateriaAlreadyOwnedException(
-                    CommonsErrorConstants.ALREADY_OWNED_ERROR_MESSAGE);
-        }
-        dias.add(diaSemana);
-    }
-
-    public void removeDay(DiaSemana diaSemana)
-            throws HorarioMateriaNotOwnedException {
-        if (!dias.contains(diaSemana)) {
-            throw new HorarioMateriaNotOwnedException(
-                    CommonsErrorConstants.NOT_OWNED_ERROR_MESSAGE);
-        }
-        dias.remove(diaSemana);
     }
 }

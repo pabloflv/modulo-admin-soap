@@ -59,7 +59,7 @@ public class UsuarioMateriaController {
                 null);
     }
 
-    @GetMapping(params = {"idUsuarioMateria"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar una relacion de usuario y materia por su id")
     @ApiResponses(
             value = {
@@ -81,7 +81,7 @@ public class UsuarioMateriaController {
         return new ApplicationResponse<>(usuarioMateriaService.findById(id), null);
     }
 
-    @GetMapping(path = "/usuarios", params = {"idMateria"})
+    @GetMapping(path = "/usuarios")
     @ApiOperation(value = "Se encarga de buscar una lista de usuarios relacionados a una materia")
     @ApiResponses(
             value = {
@@ -103,7 +103,7 @@ public class UsuarioMateriaController {
         return new ApplicationResponse<>(usuarioMateriaService.findUsersBySubject(idMateria), null);
     }
 
-    @GetMapping(path = "/materias-inscriptas", params = {"idUsuario"})
+    @GetMapping(path = "/materias-inscriptas")
     @ApiOperation(value = "Se encarga de traer una lista de materias con un flag que indique en "
             + "cual esta inscripta el usuario")
     @ApiResponses(
@@ -131,7 +131,7 @@ public class UsuarioMateriaController {
                 usuarioMateriaService.findSubjectsWithInscriptionFlag(idUsuario), null);
     }
 
-    @GetMapping(path = "/materias", params = {"idUsuario"})
+    @GetMapping(path = "/materias")
     @ApiOperation(value = "Se encarga de buscar una lista de materias relacionadas a un usuario")
     @ApiResponses(
             value = {
@@ -153,7 +153,7 @@ public class UsuarioMateriaController {
         return new ApplicationResponse<>(usuarioMateriaService.findSubjectsByUser(idUsuario), null);
     }
 
-    @DeleteMapping(params = {"idUsuarioMateria"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar una relacion de usuario y materia por su id")
     @ApiResponses(
             value = {

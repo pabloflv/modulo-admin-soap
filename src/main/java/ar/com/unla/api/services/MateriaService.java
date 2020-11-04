@@ -10,7 +10,9 @@ import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.repositories.MateriaRepository;
 import ar.com.unla.api.utils.MateriaPDFExporter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,21 +32,28 @@ public class MateriaService {
     @Autowired
     private DiaSemanaService diaSemanaService;
 
-    @Autowired
-    private PeriodoInscripcionService periodoInscripcionService;
-
     public Materia create(MateriaDTO materiaDTO) {
 
         PeriodoInscripcion inscripcionMateria =
-                periodoInscripcionService.findById(materiaDTO.getIdPeriodoInscripcionDTO());
+                new PeriodoInscripcion(materiaDTO.getPeriodoInscripcion().getFechaDesde(),
+                        materiaDTO.getPeriodoInscripcion().getFechaHasta(),
+                        materiaDTO.getPeriodoInscripcion().getFechaLimiteNota());
 
         Turno turno = turnoService.findById(materiaDTO.getIdTurno());
 
         Usuario profesor = usuarioService.findById(materiaDTO.getIdProfesor());
 
-        Materia materia =
-                new Materia(materiaDTO.getNombre(), profesor, materiaDTO.getCuatrimestre(),
-                        materiaDTO.getAnioCarrera(), turno, inscripcionMateria);
+        Set<DiaSemana> diasSemana = new HashSet<>();
+
+        for (Long dia : materiaDTO.getDias()) {
+            diasSemana.add(diaSemanaService.findById(dia));
+        }
+
+        Materia materia = materiaRepository
+                .save(new Materia(materiaDTO.getNombre(), profesor, materiaDTO.getCuatrimestre(),
+                        materiaDTO.getAnioCarrera(), turno, inscripcionMateria));
+
+        materia.getDias().addAll(diasSemana);
 
         return materiaRepository.save(materia);
     }
@@ -53,20 +62,6 @@ public class MateriaService {
         return materiaRepository.findById(id)
                 .orElseThrow(() -> new NotFoundApiException(
                         "Id de materia incorrecto. No se encontro la materia indicada."));
-    }
-
-    public Materia addDay(Long idMateria, Long idDia) {
-        Materia materia = findById(idMateria);
-        DiaSemana diaSemana = diaSemanaService.findById(idDia);
-        materia.addDay(diaSemana);
-        return materiaRepository.save(materia);
-    }
-
-    public Materia removeDay(Long idMateria, Long idDia) {
-        Materia materia = findById(idMateria);
-        DiaSemana diaSemana = diaSemanaService.findById(idDia);
-        materia.removeDay(diaSemana);
-        return materiaRepository.save(materia);
     }
 
     public List<Materia> findAll() {

@@ -58,7 +58,7 @@ public class ExamenFinalController {
         return new ApplicationResponse<>(examenFinalService.create(examenFinalDTO), null);
     }
 
-    @GetMapping(params = {"idExamenFinal"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar un examen final por su id")
     @ApiResponses(
             value = {
@@ -103,7 +103,7 @@ public class ExamenFinalController {
         examenFinalService.exportToPDF(response);
     }
 
-    @DeleteMapping(params = {"idExamenFinal"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar una examen final por su id")
     @ApiResponses(
             value = {

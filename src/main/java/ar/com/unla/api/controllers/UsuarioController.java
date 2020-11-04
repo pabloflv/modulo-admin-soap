@@ -55,7 +55,7 @@ public class UsuarioController {
         return new ApplicationResponse<>(usuarioService.create(usuarioDTO), null);
     }
 
-    @GetMapping(params = {"idUsuario"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar un usuario por su id")
     @ApiResponses(
             value = {
@@ -95,7 +95,7 @@ public class UsuarioController {
         return new ApplicationResponse<>(usuarioService.findAll(), null);
     }
 
-    @DeleteMapping(params = {"idUsuario"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar un usuario por su id")
     @ApiResponses(
             value = {

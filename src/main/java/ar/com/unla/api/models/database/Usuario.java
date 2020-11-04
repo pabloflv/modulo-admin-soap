@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,7 +47,7 @@ public class Usuario {
     @ApiModelProperty(notes = "email", required = true, example = "Nico@gmail.com", position = 5)
     private String email;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(targetEntity = Direccion.class, optional = false, cascade = {CascadeType.ALL})
     @JoinColumn(name = "idDireccion")
     @ApiModelProperty(notes = "direccion", required = true, position = 6)
     private Direccion direccion;

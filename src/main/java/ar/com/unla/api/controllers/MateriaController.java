@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,7 +57,7 @@ public class MateriaController {
         return new ApplicationResponse<>(materiaService.create(materiaDTO), null);
     }
 
-    @GetMapping(params = {"idMateria"})
+    @GetMapping
     @ApiOperation(value = "Se encarga de buscar una materia por su id")
     @ApiResponses(
             value = {
@@ -98,55 +97,7 @@ public class MateriaController {
         return new ApplicationResponse<>(materiaService.findAll(), null);
     }
 
-    @PutMapping(path = "/agregar-dia")
-    @ApiOperation(value = "Se encarga de agregar un día a una materia especifica")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(code = 200, message = "Día agregado correctamente", response =
-                            SwaggerMateriaFindAllOk.class),
-                    @ApiResponse(code = 400, message = "Request incorrecta al intentar agregar un"
-                            + " día a la materia", response = ErrorResponse.class),
-                    @ApiResponse(code = 500, message =
-                            "Error interno al agregar un día a la materia",
-                            response = ErrorResponse.class)
-            }
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<Materia> addDay(
-            @RequestParam(name = "idMateria")
-            @NotNull(message = "El parámetro idMateria no esta informado.")
-            @ApiParam(required = true) Long idMateria,
-            @RequestParam(name = "idDia")
-            @NotNull(message = "El parámetro idDia no esta informado.")
-            @ApiParam(required = true) Long idDia) {
-        return new ApplicationResponse<>(materiaService.addDay(idMateria, idDia), null);
-    }
-
-    @PutMapping(path = "/remover-dia")
-    @ApiOperation(value = "Se encarga de remover un día de una materia especifica")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(code = 200, message = "Día removido correctamente", response =
-                            SwaggerMateriaFindAllOk.class),
-                    @ApiResponse(code = 400, message = "Request incorrecta al intentar remover un"
-                            + " día a la materia", response = ErrorResponse.class),
-                    @ApiResponse(code = 500, message =
-                            "Error interno al remover un día a la materia",
-                            response = ErrorResponse.class)
-            }
-    )
-    @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<Materia> removeDay(
-            @RequestParam(name = "idMateria")
-            @NotNull(message = "El parámetro idMateria no esta informado.")
-            @ApiParam(required = true) Long idMateria,
-            @RequestParam(name = "idDia")
-            @NotNull(message = "El parámetro idDia no esta informado.")
-            @ApiParam(required = true) Long idDia) {
-        return new ApplicationResponse<>(materiaService.removeDay(idMateria, idDia), null);
-    }
-
-    @DeleteMapping(params = {"idMateria"})
+    @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar una materia por su id")
     @ApiResponses(
             value = {
