@@ -36,7 +36,9 @@ public class MateriaService {
     public Materia create(MateriaDTO materiaDTO) {
 
         PeriodoInscripcion inscripcionMateria =
-                periodoInscripcionService.findById(materiaDTO.getIdPeriodoInscripcionDTO());
+                new PeriodoInscripcion(materiaDTO.getPeriodoInscripcion().getFechaDesde(),
+                        materiaDTO.getPeriodoInscripcion().getFechaHasta(),
+                        materiaDTO.getPeriodoInscripcion().getFechaLimiteNota());
 
         Turno turno = turnoService.findById(materiaDTO.getIdTurno());
 

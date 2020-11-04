@@ -26,5 +26,5 @@ public class ExamenFinalDTO {
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @ApiModelProperty(required = true, position = 3)
-    private Long idPeriodoInscripcion;
+    private PeriodoInscripcionDTO periodoInscripcion;
 }

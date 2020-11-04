@@ -24,9 +24,11 @@ public class UsuarioService {
 
     public Usuario create(UsuarioDTO usuarioDTO) {
 
-        Direccion direccion = direccionService.findById(usuarioDTO.getIdDireccion());
-
         Rol rol = rolService.findById(usuarioDTO.getIdRol());
+
+        Direccion direccion = new Direccion(usuarioDTO.getDireccion().getPais(),
+                usuarioDTO.getDireccion().getProvincia(), usuarioDTO.getDireccion().getLocalidad(),
+                usuarioDTO.getDireccion().getCalle());
 
         Usuario usuario = new Usuario(usuarioDTO.getNombre(), usuarioDTO.getApellido(),
                 usuarioDTO.getTelefono(), usuarioDTO.getDni(), usuarioDTO.getEmail(), direccion,

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,8 @@ public class ExamenFinal {
     @ApiModelProperty(notes = "materia", required = true, position = 2)
     private Materia materia;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @OneToOne(optional = false, targetEntity = PeriodoInscripcion.class, cascade = {
+            CascadeType.ALL})
     @JoinColumn(name = "idPeriodoInscripcion")
     @ApiModelProperty(notes = "periodoInscripcion", required = true, position = 3)
     private PeriodoInscripcion periodoInscripcion;

@@ -2,6 +2,7 @@ package ar.com.unla.api.dtos.request;
 
 import ar.com.unla.api.constants.CommonsErrorConstants;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -43,9 +44,10 @@ public class UsuarioDTO {
     @ApiModelProperty(required = true, position = 6)
     private String password;
 
+    @Valid
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @ApiModelProperty(required = true, position = 7)
-    private Long idDireccion;
+    private DireccionDTO direccion;
 
     @ApiModelProperty(position = 8)
     private String imagen;

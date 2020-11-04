@@ -39,5 +39,5 @@ public class MateriaDTO {
 
     @NotNull(message = CommonsErrorConstants.REQUIRED_PARAM_ERROR_MESSAGE)
     @ApiModelProperty(required = true, position = 6)
-    private Long idPeriodoInscripcionDTO;
+    private PeriodoInscripcionDTO periodoInscripcion;
 }
