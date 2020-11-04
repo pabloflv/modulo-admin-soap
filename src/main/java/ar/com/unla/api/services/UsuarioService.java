@@ -17,9 +17,6 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private DireccionService direccionService;
-
-    @Autowired
     private RolService rolService;
 
     public Usuario create(UsuarioDTO usuarioDTO) {

@@ -20,9 +20,6 @@ public class ExamenFinalService {
     private ExamenFinalRepository examenFinalRepository;
 
     @Autowired
-    private PeriodoInscripcionService periodoInscripcionService;
-
-    @Autowired
     private MateriaService materiaService;
 
 

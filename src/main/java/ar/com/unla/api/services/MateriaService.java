@@ -30,9 +30,6 @@ public class MateriaService {
     @Autowired
     private DiaSemanaService diaSemanaService;
 
-    @Autowired
-    private PeriodoInscripcionService periodoInscripcionService;
-
     public Materia create(MateriaDTO materiaDTO) {
 
         PeriodoInscripcion inscripcionMateria =
