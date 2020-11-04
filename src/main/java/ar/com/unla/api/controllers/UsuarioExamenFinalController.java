@@ -123,6 +123,7 @@ public class UsuarioExamenFinalController {
     )
 
     //TODO://lista de usuarios pertenecientes a una materia de rol alumno
+    //TODO:// Agregar handler de los problemas de persistencia
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<UsuarioExamenFinal>> getFinalExamsByUser(
             @RequestParam(name = "idUsuario")
