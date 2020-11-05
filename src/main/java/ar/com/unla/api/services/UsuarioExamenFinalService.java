@@ -60,10 +60,10 @@ public class UsuarioExamenFinalService {
         return usuarioExamenFinalRepository.save(usuarioExamenFinal);
     }
 
-    public List<AlumnosFinalDTO> findUsersByFinalExam(Long idExamenFinal) {
-        examenFinalService.findById(idExamenFinal);
+    public List<AlumnosFinalDTO> findUsersByFinalExam(Long idMateria) {
+        examenFinalService.findById(idMateria);
         List<UsuarioExamenFinal> usuariosFinal =
-                usuarioExamenFinalRepository.findStudentsByFinalExam(idExamenFinal);
+                usuarioExamenFinalRepository.findStudentsByFinalExam(idMateria);
 
         List<AlumnosFinalDTO> alumnos = new ArrayList<>();
 

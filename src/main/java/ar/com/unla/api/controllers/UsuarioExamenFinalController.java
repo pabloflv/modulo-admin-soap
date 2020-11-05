@@ -103,11 +103,11 @@ public class UsuarioExamenFinalController {
     )
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<AlumnosFinalDTO>> getStudentsByFinalExam(
-            @RequestParam(name = "idExamenFinal")
-            @NotNull(message = "El parámetro idExamenFinal no esta informado.")
-            @ApiParam(required = true) Long idExamenFinal) {
+            @RequestParam(name = "idMateria")
+            @NotNull(message = "El parámetro idMateria no esta informado.")
+            @ApiParam(required = true) Long idMateria) {
         return new ApplicationResponse<>(
-                usuarioExamenFinalService.findUsersByFinalExam(idExamenFinal), null);
+                usuarioExamenFinalService.findUsersByFinalExam(idMateria), null);
     }
 
     @GetMapping(path = "/finales")
