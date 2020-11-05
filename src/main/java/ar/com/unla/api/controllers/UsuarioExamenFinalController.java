@@ -1,10 +1,12 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
+import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
 import ar.com.unla.api.dtos.response.FinalesInscriptosDTO;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
+import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerAlumnosFinalOk;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioExamenFinalInscriptoOK;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalFindAllOk;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
@@ -16,6 +18,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +66,7 @@ public class UsuarioExamenFinalController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Se encarga de buscar una relacion de usuario y examen final por su id")
+    @ApiOperation(value = "Se encarga de buscar una relación de usuario y examen final por su id")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "UsuarioExamenFinal encontrado", response =
@@ -82,23 +87,22 @@ public class UsuarioExamenFinalController {
         return new ApplicationResponse<>(usuarioExamenFinalService.findById(id), null);
     }
 
-    @GetMapping(path = "/usuarios")
-    @ApiOperation(value = "Se encarga de buscar una lista de usuarios relacionados a un examen "
+    @GetMapping(path = "/alumnos")
+    @ApiOperation(value = "Se encarga de buscar una lista de alumnos relacionados a un examen "
             + "final")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Usuarios por examen final encontrados",
-                            response =
-                                    SwaggerUsuarioFinalFindAllOk.class),
+                    @ApiResponse(code = 200, message = "Alumnos por examen final encontrados",
+                            response = SwaggerAlumnosFinalOk.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
-                            + " usuarios por examen final", response = ErrorResponse.class),
+                            + " alumnos por examen final", response = ErrorResponse.class),
                     @ApiResponse(code = 500, message =
-                            "Error interno al buscar una lista de usuarios por examen final",
+                            "Error interno al buscar una lista de alumnos por examen final",
                             response = ErrorResponse.class)
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<List<UsuarioExamenFinal>> getUsersByFinalExam(
+    public ApplicationResponse<List<AlumnosFinalDTO>> getStudentsByFinalExam(
             @RequestParam(name = "idExamenFinal")
             @NotNull(message = "El parámetro idExamenFinal no esta informado.")
             @ApiParam(required = true) Long idExamenFinal) {
@@ -122,8 +126,6 @@ public class UsuarioExamenFinalController {
             }
     )
 
-    //TODO://lista de usuarios pertenecientes a una materia de rol alumno
-    //TODO:// Agregar handler de los problemas de persistencia
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<UsuarioExamenFinal>> getFinalExamsByUser(
             @RequestParam(name = "idUsuario")
@@ -134,8 +136,8 @@ public class UsuarioExamenFinalController {
     }
 
     @GetMapping(path = "/finales-inscriptos")
-    @ApiOperation(value = "Se encarga de buscar una lista de examenes finales relacionados con un"
-            + " flag indicando si el usuario esta inscripto")
+    @ApiOperation(value = "Se encarga de buscar una lista de examenes finales con un"
+            + " flag indicando si el usuario en cuestion esta inscripto o no")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message =
@@ -187,6 +189,38 @@ public class UsuarioExamenFinalController {
             @ApiParam(required = true) Boolean recordatorio) {
         return new ApplicationResponse<>(
                 usuarioExamenFinalService.updateRemainder(id, recordatorio), null);
+    }
+
+    @PutMapping(path = "/calificaciones")
+    @ApiOperation(value = "Se encarga de actualizar la calificación de un alumno en un examen "
+            + "final")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Calificación de examen final actualizada"
+                            , response = SwaggerUsuarioFinalOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar la calificación de un examen final",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar la calificación de un examen final",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<UsuarioExamenFinal> updateQualification(
+            @RequestParam(name = "idUsuarioExamenFinal")
+            @NotNull(message = "El parámetro idUsuarioExamenFinal no esta informado.")
+            @ApiParam(required = true) Long id,
+            @RequestParam(name = "calificacion")
+            @NotNull(message = "El parámetro calificación no esta informado.")
+            @Digits(integer = 2, fraction = 2, message =
+                    "El parámetro calificación puede tener {integer} cifras enteras y {fraction} "
+                            + "cifras decimales como máximo.")
+            @Max(value = 10, message = "El parametro calificación no puede ser mayor a {value}")
+            @Min(value = 0, message = "El parametro calificación no puede ser menor a {value}}")
+            @ApiParam(required = true) float calificacion) {
+        return new ApplicationResponse<>(
+                usuarioExamenFinalService.updateQualification(id, calificacion), null);
     }
 
     @DeleteMapping

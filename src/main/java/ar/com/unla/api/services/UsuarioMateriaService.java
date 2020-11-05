@@ -1,6 +1,8 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.response.AlumnoDTO;
+import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Materia;
@@ -46,9 +48,25 @@ public class UsuarioMateriaService {
                                 + "indicado."));
     }
 
-    public List<UsuarioMateria> findUsersBySubject(Long idMateria) {
+    public List<AlumnosMateriaDTO> findStudentsBySubject(Long idMateria) {
         materiaService.findById(idMateria);
-        return usuarioMateriaRepository.findUsersBySubject(idMateria);
+        List<UsuarioMateria> usuariosMateria =
+                usuarioMateriaRepository.findStudentBySubject(idMateria);
+
+        List<AlumnosMateriaDTO> alumnos = new ArrayList<>();
+
+        if (usuariosMateria != null && !usuariosMateria.isEmpty()) {
+            AlumnosMateriaDTO alumnosMateriaDTO = new AlumnosMateriaDTO();
+            alumnosMateriaDTO.setMateria(usuariosMateria.get(0).getMateria());
+            alumnosMateriaDTO.setAlumnos(new ArrayList<>());
+
+            for (UsuarioMateria um : usuariosMateria) {
+                AlumnoDTO alumno = new AlumnoDTO(um.getUsuario(), um.getCalificacion(), um.getId());
+                alumnosMateriaDTO.getAlumnos().add(alumno);
+            }
+            alumnos.add(alumnosMateriaDTO);
+        }
+        return alumnos;
     }
 
     public List<UsuarioMateria> findSubjectsByUser(Long idUsuario) {
@@ -62,36 +80,46 @@ public class UsuarioMateriaService {
 
         List<MateriasInscriptasDTO> subjectsWithInscriptionFlag = new ArrayList<>();
 
-        for (Materia materia : allSubjects) {
+        if ((subjectsByUser != null && !subjectsByUser.isEmpty()) && (allSubjects != null
+                && !allSubjects.isEmpty())) {
 
-            MateriasInscriptasDTO inscriptedSubjects
-                    = new MateriasInscriptasDTO(
-                    materia.getId(), materia.getNombre(), materia.getProfesor(),
-                    materia.getCuatrimestre(), materia.getAnioCarrera(),
-                    materia.getTurno(), materia.getPeriodoInscripcion(),
-                    materia.getDias(), false, 0L);
+            for (Materia materia : allSubjects) {
 
-            for (UsuarioMateria usuarioMateria : subjectsByUser) {
-                if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
-                    inscriptedSubjects.setInscripto(true);
-                    inscriptedSubjects.setIdInscripcion(usuarioMateria.getId());
-                    break;
+                MateriasInscriptasDTO inscriptedSubjects
+                        = new MateriasInscriptasDTO(
+                        materia.getId(), materia.getNombre(), materia.getProfesor(),
+                        materia.getCuatrimestre(), materia.getAnioCarrera(),
+                        materia.getTurno(), materia.getPeriodoInscripcion(),
+                        materia.getDias(), false, 0L);
+
+                for (UsuarioMateria usuarioMateria : subjectsByUser) {
+                    if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
+                        inscriptedSubjects.setInscripto(true);
+                        inscriptedSubjects.setIdInscripcion(usuarioMateria.getId());
+                        break;
+                    }
                 }
+                subjectsWithInscriptionFlag.add(inscriptedSubjects);
             }
-            subjectsWithInscriptionFlag.add(inscriptedSubjects);
-        }
 
-        subjectsWithInscriptionFlag = subjectsWithInscriptionFlag.stream()
-                .filter(materia ->
-                        (materia.isInscripto()) ||
-                                (materia.getPeriodoInscripcion().getFechaHasta()
-                                        .isAfter(LocalDate.now())
-                                        && !materia.isInscripto()) ||
-                                (materia.getPeriodoInscripcion().getFechaHasta()
-                                        .equals(LocalDate.now()) && !materia.isInscripto())
-                )
-                .collect(Collectors.toList());
+            subjectsWithInscriptionFlag = subjectsWithInscriptionFlag.stream()
+                    .filter(materia ->
+                            (materia.isInscripto()) ||
+                                    (materia.getPeriodoInscripcion().getFechaHasta()
+                                            .isAfter(LocalDate.now())
+                                            && !materia.isInscripto()) ||
+                                    (materia.getPeriodoInscripcion().getFechaHasta()
+                                            .equals(LocalDate.now()) && !materia.isInscripto())
+                    )
+                    .collect(Collectors.toList());
+        }
         return subjectsWithInscriptionFlag;
+    }
+
+    public UsuarioMateria updateQualification(Long id, float calificacion) {
+        UsuarioMateria usuarioMateria = findById(id);
+        usuarioMateria.setCalificacion(calificacion);
+        return usuarioMateriaRepository.save(usuarioMateria);
     }
 
     public void delete(Long id) {

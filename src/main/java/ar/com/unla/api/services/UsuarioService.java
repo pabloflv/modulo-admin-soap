@@ -45,6 +45,10 @@ public class UsuarioService {
         return usuarioRepository.findAllByOrderByApellidoAsc();
     }
 
+    public List<Usuario> findAllTeachers() {
+        return usuarioRepository.findTeacherUsers();
+    }
+
     public void delete(Long id) {
         findById(id);
         usuarioRepository.deleteById(id);

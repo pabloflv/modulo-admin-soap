@@ -99,6 +99,7 @@ public class ExamenFinalController {
     }
 
     @GetMapping("/finales-pdf")
+    @ApiOperation(value = "Se encarga de generar un pdf con la planilla de los finales")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         examenFinalService.exportToPDF(response);
     }

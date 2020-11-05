@@ -39,8 +39,8 @@ public class MateriasInscriptasDTO {
     @ApiModelProperty(notes = "periodoInscripcion", position = 6)
     private PeriodoInscripcion periodoInscripcion;
 
-    @ApiModelProperty(notes = "horarios", position = 7)
-    private Set<DiaSemana> horarios = new HashSet<>();
+    @ApiModelProperty(notes = "dias", position = 7)
+    private Set<DiaSemana> dias = new HashSet<>();
 
     @ApiModelProperty(notes = "inscripto", position = 8)
     private boolean inscripto;

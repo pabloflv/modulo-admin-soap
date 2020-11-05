@@ -59,6 +59,9 @@ public class FinalesPDFExporter {
 
         cell.setPhrase(new Phrase("Fecha", font));
         table.addCell(cell);
+
+        cell.setPhrase(new Phrase("Horario", font));
+        table.addCell(cell);
     }
 
     private void writeTableData(PdfPTable table, List<ExamenFinal> finales) {
@@ -66,38 +69,47 @@ public class FinalesPDFExporter {
         PdfPCell cell = new PdfPCell();
         cell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
 
-        for (ExamenFinal examenFinal : Collections.unmodifiableList(finales)) {
+        if (finales != null && !finales.isEmpty()) {
+            for (ExamenFinal examenFinal : Collections.unmodifiableList(finales)) {
 
-            if (examenFinal.getMateria() != null) {
+                if (examenFinal.getMateria() != null) {
 
-                cell.setPhrase(
-                        new Phrase(String.valueOf(examenFinal.getMateria().getAnioCarrera())));
-                table.addCell(cell);
+                    cell.setPhrase(
+                            new Phrase(String.valueOf(examenFinal.getMateria().getAnioCarrera())));
+                    table.addCell(cell);
 
-                cell.setPhrase(new Phrase(examenFinal.getMateria().getNombre()));
-                table.addCell(cell);
+                    cell.setPhrase(new Phrase(examenFinal.getMateria().getNombre()));
+                    table.addCell(cell);
 
-                if (examenFinal.getPeriodoInscripcion() != null) {
+                    if (examenFinal.getPeriodoInscripcion() != null) {
 
-                    PdfPCell datesCell = new PdfPCell();
-                    datesCell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+                        PdfPCell datesCell = new PdfPCell();
+                        datesCell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+                        datesCell.setNoWrap(true);
+                        datesCell.setExtraParagraphSpace(5);
 
-                    String inscripcion =
-                            " Desde: " + examenFinal.getPeriodoInscripcion().getFechaDesde()
-                                    .toString() + "\n" +
-                                    " Hasta: " + examenFinal.getPeriodoInscripcion().getFechaDesde()
-                                    .toString();
-                    datesCell.setPhrase(new Phrase(inscripcion));
-                    datesCell.setPaddingTop(4);
-                    datesCell.setPaddingBottom(8);
-                    table.addCell(datesCell);
+                        String inscripcion =
+                                " Desde: " + examenFinal.getPeriodoInscripcion().getFechaDesde()
+                                        .toString() + "\n" +
+                                        " Hasta: " + examenFinal.getPeriodoInscripcion()
+                                        .getFechaDesde()
+                                        .toString();
+                        datesCell.setPhrase(new Phrase(inscripcion));
+                        datesCell.setPaddingTop(4);
+                        datesCell.setPaddingBottom(8);
+                        table.addCell(datesCell);
+                    }
+
+                    cell.setPhrase(new Phrase(examenFinal.getFecha().toString()));
+                    table.addCell(cell);
+
+                    String horario = examenFinal.getMateria().getTurno().getHoraDesde() + " - " +
+                            examenFinal.getMateria().getTurno().getHoraHasta();
+                    cell.setPhrase(new Phrase(horario));
+                    table.addCell(cell);
                 }
-
-                cell.setPhrase(new Phrase(examenFinal.getFecha().toString()));
-                table.addCell(cell);
             }
         }
-
     }
 
     public void export(HttpServletResponse response) throws IOException {
@@ -109,24 +121,27 @@ public class FinalesPDFExporter {
 
         writeTableTitle(document, "Finales UNLa");
 
-        PdfPTable tablaManiana = new PdfPTable(4);
+        PdfPTable tablaManiana = new PdfPTable(5);
         tablaManiana.setWidthPercentage(100);
+        tablaManiana.setWidths(new float[]{15f, 20f, 25f, 20f, 20f});
 
         writeTableTitle(document, "Turno mañana");
         writeTableHeader(tablaManiana);
         writeTableData(tablaManiana, finalesMañana);
         document.add(tablaManiana);
 
-        PdfPTable tablaTarde = new PdfPTable(4);
+        PdfPTable tablaTarde = new PdfPTable(5);
         tablaTarde.setWidthPercentage(100);
+        tablaTarde.setWidths(new float[]{15f, 20f, 25f, 20f, 20f});
 
         writeTableTitle(document, "Turno tarde");
         writeTableHeader(tablaTarde);
         writeTableData(tablaTarde, finalesTarde);
         document.add(tablaTarde);
 
-        PdfPTable tablaNoche = new PdfPTable(4);
+        PdfPTable tablaNoche = new PdfPTable(5);
         tablaNoche.setWidthPercentage(100);
+        tablaNoche.setWidths(new float[]{15f, 20f, 25f, 20f, 20f});
 
         writeTableTitle(document, "Turno noche");
         writeTableHeader(tablaNoche);

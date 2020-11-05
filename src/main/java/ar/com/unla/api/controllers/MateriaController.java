@@ -119,6 +119,8 @@ public class MateriaController {
     }
 
     @GetMapping("/cuatrimestres-pdf")
+    @ApiOperation(value = "Se encarga de generar un pdf con el calendario academico (Materias, "
+            + "cuatrimestre y horarios)")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         materiaService.exportToPDF(response);
     }

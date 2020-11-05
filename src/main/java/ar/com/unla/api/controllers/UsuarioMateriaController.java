@@ -1,10 +1,12 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
+import ar.com.unla.api.models.swagger.usuariomateria.SwaggerAlumnosMateriaOK;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriaFindAllOk;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriaOk;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriasInscriptasOK;
@@ -16,6 +18,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,26 +87,26 @@ public class UsuarioMateriaController {
         return new ApplicationResponse<>(usuarioMateriaService.findById(id), null);
     }
 
-    @GetMapping(path = "/usuarios")
-    @ApiOperation(value = "Se encarga de buscar una lista de usuarios relacionados a una materia")
+    @GetMapping(path = "/alumnos")
+    @ApiOperation(value = "Se encarga de buscar una lista de alumnos relacionados a una materia")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Usuarios por materia encontrados",
-                            response =
-                                    SwaggerUsuarioMateriaFindAllOk.class),
+                    @ApiResponse(code = 200, message = "Alumnos por materia encontrados",
+                            response = SwaggerAlumnosMateriaOK.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
-                            + " usuarios por materia", response = ErrorResponse.class),
+                            + " alumnos por materia", response = ErrorResponse.class),
                     @ApiResponse(code = 500, message =
-                            "Error interno al buscar una lista de usuarios por materia",
+                            "Error interno al buscar una lista de alumnos por materia",
                             response = ErrorResponse.class)
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<List<UsuarioMateria>> getUsersBySubject(
+    public ApplicationResponse<List<AlumnosMateriaDTO>> getStudentsBySubject(
             @RequestParam(name = "idMateria")
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long idMateria) {
-        return new ApplicationResponse<>(usuarioMateriaService.findUsersBySubject(idMateria), null);
+        return new ApplicationResponse<>(usuarioMateriaService.findStudentsBySubject(idMateria),
+                null);
     }
 
     @GetMapping(path = "/materias-inscriptas")
@@ -151,6 +157,37 @@ public class UsuarioMateriaController {
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long idUsuario) {
         return new ApplicationResponse<>(usuarioMateriaService.findSubjectsByUser(idUsuario), null);
+    }
+
+    @PutMapping(path = "/calificaciones")
+    @ApiOperation(value = "Se encarga de actualizar la calificación de un alumno en una materia")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Calificacion de la materia actualizada",
+                            response = SwaggerUsuarioMateriaOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar la calificación de la materia",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar la calificación de la materia",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<UsuarioMateria> updateQualification(
+            @RequestParam(name = "idUsuarioMateria")
+            @NotNull(message = "El parámetro idUsuarioExamenFinal no esta informado.")
+            @ApiParam(required = true) Long id,
+            @RequestParam(name = "calificacion")
+            @NotNull(message = "El parámetro calificación no esta informado.")
+            @Digits(integer = 2, fraction = 2, message =
+                    "El parámetro calificación puede tener {integer} cifras enteras y {fraction} "
+                            + "cifras decimales como máximo.")
+            @Max(value = 10, message = "El parametro calificación no puede ser mayor a {value}")
+            @Min(value = 0, message = "El parametro calificación no puede ser menor a {value}}")
+            @ApiParam(required = true) float calificacion) {
+        return new ApplicationResponse<>(
+                usuarioMateriaService.updateQualification(id, calificacion), null);
     }
 
     @DeleteMapping

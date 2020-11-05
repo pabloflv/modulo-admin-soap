@@ -9,9 +9,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsuarioMateriaRepository extends JpaRepository<UsuarioMateria, Long> {
 
-    @Query("SELECT usm FROM UsuarioMateria usm INNER JOIN usm.usuario u INNER "
-            + "JOIN usm.materia m WHERE m.id = :idMateria")
-    List<UsuarioMateria> findUsersBySubject(long idMateria);
+    @Query("SELECT usm FROM UsuarioMateria usm "
+            + "INNER JOIN usm.usuario u "
+            + "INNER JOIN u.rol r "
+            + "INNER JOIN usm.materia m "
+            + "WHERE m.id = :idMateria AND r.descripcion = 'alumno'")
+    List<UsuarioMateria> findStudentBySubject(long idMateria);
 
     @Query("SELECT usm FROM UsuarioMateria usm INNER JOIN usm.usuario u INNER "
             + "JOIN usm.materia m WHERE u.id = :idUsuario")
