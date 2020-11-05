@@ -26,6 +26,9 @@ public class UsuarioExamenFinalService {
     private ExamenFinalService examenFinalService;
 
     @Autowired
+    private MateriaService materiaService;
+
+    @Autowired
     private UsuarioService usuarioService;
 
     public UsuarioExamenFinal create(UsuarioExamenFinalDTO usuarioExamenFinalDTO) {
@@ -61,7 +64,7 @@ public class UsuarioExamenFinalService {
     }
 
     public List<AlumnosFinalDTO> findUsersByFinalExam(Long idMateria) {
-        examenFinalService.findById(idMateria);
+        materiaService.findById(idMateria);
         List<UsuarioExamenFinal> usuariosFinal =
                 usuarioExamenFinalRepository.findStudentsByFinalExam(idMateria);
 
