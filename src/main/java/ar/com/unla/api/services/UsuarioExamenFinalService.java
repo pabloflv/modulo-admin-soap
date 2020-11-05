@@ -54,6 +54,12 @@ public class UsuarioExamenFinalService {
         return usuarioExamenFinalRepository.save(usuarioExamenFinal);
     }
 
+    public UsuarioExamenFinal updateQualification(Long id, float calificacion) {
+        UsuarioExamenFinal usuarioExamenFinal = findById(id);
+        usuarioExamenFinal.setCalificacion(calificacion);
+        return usuarioExamenFinalRepository.save(usuarioExamenFinal);
+    }
+
     public List<AlumnosFinalDTO> findUsersByFinalExam(Long idExamenFinal) {
         examenFinalService.findById(idExamenFinal);
         List<UsuarioExamenFinal> usuariosFinal =

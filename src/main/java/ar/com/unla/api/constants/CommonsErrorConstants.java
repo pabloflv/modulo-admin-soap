@@ -46,9 +46,9 @@ public final class CommonsErrorConstants {
     public static final String SIZE_DOCUMENT_NUMBER_ERROR =
             "El parámetro dni no debe tener más de {max} caracteres.";
 
-    public static final String MAX_VALUE_ERROR = "El parametro %s no puede ser mayor a {max}";
+    public static final String MAX_VALUE_ERROR = "El parametro %s no puede ser mayor a {value}";
 
-    public static final String MIN_VALUE_ERROR = "El parametro %s no puede ser menor a {min}";
+    public static final String MIN_VALUE_ERROR = "El parametro %s no puede ser menor a {value}";
 
     public static final String QUALIFICATION_VALUE_ERROR = "El parámetro %s "
             + "puede tener {integer} cifras enteras y {fraction} cifras decimales como máximo.";

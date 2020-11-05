@@ -116,6 +116,12 @@ public class UsuarioMateriaService {
         return subjectsWithInscriptionFlag;
     }
 
+    public UsuarioMateria updateQualification(Long id, float calificacion) {
+        UsuarioMateria usuarioMateria = findById(id);
+        usuarioMateria.setCalificacion(calificacion);
+        return usuarioMateriaRepository.save(usuarioMateria);
+    }
+
     public void delete(Long id) {
         findById(id);
         usuarioMateriaRepository.deleteById(id);
