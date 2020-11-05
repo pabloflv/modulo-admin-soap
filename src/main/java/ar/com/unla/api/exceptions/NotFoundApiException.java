@@ -20,6 +20,6 @@ public class NotFoundApiException extends GeneralApiException {
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.BAD_REQUEST;
+        return HttpStatus.NOT_FOUND;
     }
 }

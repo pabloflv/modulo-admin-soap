@@ -89,7 +89,7 @@ public class UsuarioExamenFinalController {
 
     @GetMapping(path = "/alumnos")
     @ApiOperation(value = "Se encarga de buscar una lista de alumnos relacionados a un examen "
-            + "final")
+            + "final filtrado por la materia en cuestion")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Alumnos por examen final encontrados",
