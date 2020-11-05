@@ -87,7 +87,10 @@ public class MateriaPDFExporter {
 
                 StringBuilder dias = new StringBuilder();
 
+                PdfPCell cellDays = new PdfPCell();
+                cellDays.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
                 if (materia.getDias() != null && !materia.getDias().isEmpty()) {
+
                     for (DiaSemana dia : materia.getDias()) {
                         String horarios =
                                 dia.getNombre() + " - " + materia.getTurno().getHoraDesde() + " "
@@ -97,8 +100,10 @@ public class MateriaPDFExporter {
                     }
                 }
 
-                cell.setPhrase(new Phrase(String.valueOf(dias)));
-                table.addCell(cell);
+                cellDays.setPhrase(new Phrase(String.valueOf(dias)));
+                cellDays.setNoWrap(true);
+                cellDays.setExtraParagraphSpace(5);
+                table.addCell(cellDays);
             }
         }
     }
@@ -114,6 +119,7 @@ public class MateriaPDFExporter {
 
         PdfPTable tablaManiana = new PdfPTable(5);
         tablaManiana.setWidthPercentage(100);
+        tablaManiana.setWidths(new float[]{15f, 20f, 20f, 15, 30f});
 
         writeTableTitle(document, "Turno mañana");
         writeTableHeader(tablaManiana);
@@ -122,6 +128,7 @@ public class MateriaPDFExporter {
 
         PdfPTable tablaTarde = new PdfPTable(5);
         tablaTarde.setWidthPercentage(100);
+        tablaTarde.setWidths(new float[]{15f, 20f, 20f, 15f, 30f});
 
         writeTableTitle(document, "Turno tarde");
         writeTableHeader(tablaTarde);
@@ -130,6 +137,7 @@ public class MateriaPDFExporter {
 
         PdfPTable tablaNoche = new PdfPTable(5);
         tablaNoche.setWidthPercentage(100);
+        tablaNoche.setWidths(new float[]{15f, 20f, 20f, 15f, 30f});
 
         writeTableTitle(document, "Turno noche");
         writeTableHeader(tablaNoche);
