@@ -1,6 +1,7 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.MateriaDTO;
+import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.DiaSemana;
 import ar.com.unla.api.models.database.Materia;
@@ -32,6 +33,9 @@ public class MateriaService {
     @Autowired
     private DiaSemanaService diaSemanaService;
 
+    @Autowired
+    private UsuarioMateriaService usuarioMateriaService;
+
     public Materia create(MateriaDTO materiaDTO) {
 
         PeriodoInscripcion inscripcionMateria =
@@ -54,6 +58,10 @@ public class MateriaService {
         Materia materia = materiaRepository
                 .save(new Materia(materiaDTO.getNombre(), profesor, materiaDTO.getCuatrimestre(),
                         materiaDTO.getAnioCarrera(), turno, inscripcionMateria));
+//Probar si funciona
+        UsuarioMateriaDTO usuarioMateriaDTO =
+                new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f);
+        usuarioMateriaService.create(usuarioMateriaDTO);
 
         materia.getDias().addAll(diasSemana);
 
