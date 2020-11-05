@@ -1,10 +1,12 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
+import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
+import ar.com.unla.api.models.swagger.usuariomateria.SwaggerAlumnosMateriaOK;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriaFindAllOk;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriaOk;
 import ar.com.unla.api.models.swagger.usuariomateria.SwaggerUsuarioMateriasInscriptasOK;
@@ -81,26 +83,26 @@ public class UsuarioMateriaController {
         return new ApplicationResponse<>(usuarioMateriaService.findById(id), null);
     }
 
-    @GetMapping(path = "/usuarios")
-    @ApiOperation(value = "Se encarga de buscar una lista de usuarios relacionados a una materia")
+    @GetMapping(path = "/alumnos")
+    @ApiOperation(value = "Se encarga de buscar una lista de alumnos relacionados a una materia")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Usuarios por materia encontrados",
-                            response =
-                                    SwaggerUsuarioMateriaFindAllOk.class),
+                    @ApiResponse(code = 200, message = "Alumnos por materia encontrados",
+                            response = SwaggerAlumnosMateriaOK.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
-                            + " usuarios por materia", response = ErrorResponse.class),
+                            + " alumnos por materia", response = ErrorResponse.class),
                     @ApiResponse(code = 500, message =
-                            "Error interno al buscar una lista de usuarios por materia",
+                            "Error interno al buscar una lista de alumnos por materia",
                             response = ErrorResponse.class)
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<List<UsuarioMateria>> getUsersBySubject(
+    public ApplicationResponse<List<AlumnosMateriaDTO>> getStudentsBySubject(
             @RequestParam(name = "idMateria")
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long idMateria) {
-        return new ApplicationResponse<>(usuarioMateriaService.findUsersBySubject(idMateria), null);
+        return new ApplicationResponse<>(usuarioMateriaService.findStudentsBySubject(idMateria),
+                null);
     }
 
     @GetMapping(path = "/materias-inscriptas")

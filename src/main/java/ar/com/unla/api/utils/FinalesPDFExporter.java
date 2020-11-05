@@ -66,38 +66,40 @@ public class FinalesPDFExporter {
         PdfPCell cell = new PdfPCell();
         cell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
 
-        for (ExamenFinal examenFinal : Collections.unmodifiableList(finales)) {
+        if (finales != null && !finales.isEmpty()) {
+            for (ExamenFinal examenFinal : Collections.unmodifiableList(finales)) {
 
-            if (examenFinal.getMateria() != null) {
+                if (examenFinal.getMateria() != null) {
 
-                cell.setPhrase(
-                        new Phrase(String.valueOf(examenFinal.getMateria().getAnioCarrera())));
-                table.addCell(cell);
+                    cell.setPhrase(
+                            new Phrase(String.valueOf(examenFinal.getMateria().getAnioCarrera())));
+                    table.addCell(cell);
 
-                cell.setPhrase(new Phrase(examenFinal.getMateria().getNombre()));
-                table.addCell(cell);
+                    cell.setPhrase(new Phrase(examenFinal.getMateria().getNombre()));
+                    table.addCell(cell);
 
-                if (examenFinal.getPeriodoInscripcion() != null) {
+                    if (examenFinal.getPeriodoInscripcion() != null) {
 
-                    PdfPCell datesCell = new PdfPCell();
-                    datesCell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
+                        PdfPCell datesCell = new PdfPCell();
+                        datesCell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
 
-                    String inscripcion =
-                            " Desde: " + examenFinal.getPeriodoInscripcion().getFechaDesde()
-                                    .toString() + "\n" +
-                                    " Hasta: " + examenFinal.getPeriodoInscripcion().getFechaDesde()
-                                    .toString();
-                    datesCell.setPhrase(new Phrase(inscripcion));
-                    datesCell.setPaddingTop(4);
-                    datesCell.setPaddingBottom(8);
-                    table.addCell(datesCell);
+                        String inscripcion =
+                                " Desde: " + examenFinal.getPeriodoInscripcion().getFechaDesde()
+                                        .toString() + "\n" +
+                                        " Hasta: " + examenFinal.getPeriodoInscripcion()
+                                        .getFechaDesde()
+                                        .toString();
+                        datesCell.setPhrase(new Phrase(inscripcion));
+                        datesCell.setPaddingTop(4);
+                        datesCell.setPaddingBottom(8);
+                        table.addCell(datesCell);
+                    }
+
+                    cell.setPhrase(new Phrase(examenFinal.getFecha().toString()));
+                    table.addCell(cell);
                 }
-
-                cell.setPhrase(new Phrase(examenFinal.getFecha().toString()));
-                table.addCell(cell);
             }
         }
-
     }
 
     public void export(HttpServletResponse response) throws IOException {

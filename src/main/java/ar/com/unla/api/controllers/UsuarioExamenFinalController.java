@@ -1,10 +1,12 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
+import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
 import ar.com.unla.api.dtos.response.FinalesInscriptosDTO;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
+import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerAlumnosFinalOk;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioExamenFinalInscriptoOK;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalFindAllOk;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
@@ -61,7 +63,7 @@ public class UsuarioExamenFinalController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Se encarga de buscar una relacion de usuario y examen final por su id")
+    @ApiOperation(value = "Se encarga de buscar una relación de usuario y examen final por su id")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "UsuarioExamenFinal encontrado", response =
@@ -82,23 +84,22 @@ public class UsuarioExamenFinalController {
         return new ApplicationResponse<>(usuarioExamenFinalService.findById(id), null);
     }
 
-    @GetMapping(path = "/usuarios")
-    @ApiOperation(value = "Se encarga de buscar una lista de usuarios relacionados a un examen "
+    @GetMapping(path = "/alumnos")
+    @ApiOperation(value = "Se encarga de buscar una lista de alumnos relacionados a un examen "
             + "final")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message = "Usuarios por examen final encontrados",
-                            response =
-                                    SwaggerUsuarioFinalFindAllOk.class),
+                    @ApiResponse(code = 200, message = "Alumnos por examen final encontrados",
+                            response = SwaggerAlumnosFinalOk.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
-                            + " usuarios por examen final", response = ErrorResponse.class),
+                            + " alumnos por examen final", response = ErrorResponse.class),
                     @ApiResponse(code = 500, message =
-                            "Error interno al buscar una lista de usuarios por examen final",
+                            "Error interno al buscar una lista de alumnos por examen final",
                             response = ErrorResponse.class)
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<List<UsuarioExamenFinal>> getUsersByFinalExam(
+    public ApplicationResponse<List<AlumnosFinalDTO>> getStudentsByFinalExam(
             @RequestParam(name = "idExamenFinal")
             @NotNull(message = "El parámetro idExamenFinal no esta informado.")
             @ApiParam(required = true) Long idExamenFinal) {
@@ -132,8 +133,8 @@ public class UsuarioExamenFinalController {
     }
 
     @GetMapping(path = "/finales-inscriptos")
-    @ApiOperation(value = "Se encarga de buscar una lista de examenes finales relacionados con un"
-            + " flag indicando si el usuario esta inscripto")
+    @ApiOperation(value = "Se encarga de buscar una lista de examenes finales con un"
+            + " flag indicando si el usuario en cuestion esta inscripto o no")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message =

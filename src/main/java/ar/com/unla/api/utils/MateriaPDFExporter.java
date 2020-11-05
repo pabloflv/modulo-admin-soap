@@ -70,36 +70,37 @@ public class MateriaPDFExporter {
         PdfPCell cell = new PdfPCell();
         cell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
 
-        for (Materia materia : Collections.unmodifiableList(materias)) {
-            cell.setPhrase(new Phrase(String.valueOf(materia.getAnioCarrera())));
-            table.addCell(cell);
+        if (materias != null && !materias.isEmpty()) {
+            for (Materia materia : Collections.unmodifiableList(materias)) {
+                cell.setPhrase(new Phrase(String.valueOf(materia.getAnioCarrera())));
+                table.addCell(cell);
 
-            cell.setPhrase(new Phrase(materia.getCuatrimestre() == 1 ? "Primer Cuatrimestre"
-                    : "Segundo Cuatrimestre"));
-            table.addCell(cell);
+                cell.setPhrase(new Phrase(materia.getCuatrimestre() == 1 ? "Primer Cuatrimestre"
+                        : "Segundo Cuatrimestre"));
+                table.addCell(cell);
 
-            cell.setPhrase(new Phrase(materia.getNombre()));
-            table.addCell(cell);
+                cell.setPhrase(new Phrase(materia.getNombre()));
+                table.addCell(cell);
 
-            cell.setPhrase(new Phrase(materia.getTurno().getDescripcion()));
-            table.addCell(cell);
+                cell.setPhrase(new Phrase(materia.getTurno().getDescripcion()));
+                table.addCell(cell);
 
-            StringBuilder dias = new StringBuilder();
+                StringBuilder dias = new StringBuilder();
 
-            if (materia.getDias() != null && !materia.getDias().isEmpty()) {
-                for (DiaSemana dia : materia.getDias()) {
-                    String horarios =
-                            dia.getNombre() + " - " + materia.getTurno().getHoraDesde() + " "
-                                    + materia
-                                    .getTurno().getHoraHasta() + "\n";
-                    dias.append(horarios);
+                if (materia.getDias() != null && !materia.getDias().isEmpty()) {
+                    for (DiaSemana dia : materia.getDias()) {
+                        String horarios =
+                                dia.getNombre() + " - " + materia.getTurno().getHoraDesde() + " "
+                                        + materia
+                                        .getTurno().getHoraHasta() + "\n";
+                        dias.append(horarios);
+                    }
                 }
+
+                cell.setPhrase(new Phrase(String.valueOf(dias)));
+                table.addCell(cell);
             }
-
-            cell.setPhrase(new Phrase(String.valueOf(dias)));
-            table.addCell(cell);
         }
-
     }
 
     public void export(HttpServletResponse response) throws IOException {

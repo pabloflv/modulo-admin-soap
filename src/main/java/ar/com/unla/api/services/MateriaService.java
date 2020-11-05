@@ -45,8 +45,10 @@ public class MateriaService {
 
         Set<DiaSemana> diasSemana = new HashSet<>();
 
-        for (Long dia : materiaDTO.getDias()) {
-            diasSemana.add(diaSemanaService.findById(dia));
+        if (materiaDTO.getDias() != null && !materiaDTO.getDias().isEmpty()) {
+            for (Long dia : materiaDTO.getDias()) {
+                diasSemana.add(diaSemanaService.findById(dia));
+            }
         }
 
         Materia materia = materiaRepository
