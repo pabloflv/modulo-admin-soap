@@ -94,8 +94,7 @@ public class UsuarioExamenFinalService {
 
         List<FinalesInscriptosDTO> finalsWithInscriptionFlag = new ArrayList<>();
 
-        if ((finalsByUser != null && !finalsByUser.isEmpty()) && (allFinals != null
-                && !allFinals.isEmpty())) {
+        if (allFinals != null && !allFinals.isEmpty()) {
             for (ExamenFinal examenFinal : allFinals) {
 
                 FinalesInscriptosDTO inscriptedFinal
@@ -103,13 +102,14 @@ public class UsuarioExamenFinalService {
                         examenFinal.getId(), examenFinal.getFecha(),
                         examenFinal.getMateria(), examenFinal.getPeriodoInscripcion()
                         , false, false, 0L);
-
-                for (UsuarioExamenFinal usuarioFinal : finalsByUser) {
-                    if (usuarioFinal.getExamenFinal().getId().equals(examenFinal.getId())) {
-                        inscriptedFinal.setInscripto(true);
-                        inscriptedFinal.setRecordatorio(usuarioFinal.getRecordatorio());
-                        inscriptedFinal.setIdInscripcion(usuarioFinal.getId());
-                        break;
+                if (finalsByUser != null && !finalsByUser.isEmpty()) {
+                    for (UsuarioExamenFinal usuarioFinal : finalsByUser) {
+                        if (usuarioFinal.getExamenFinal().getId().equals(examenFinal.getId())) {
+                            inscriptedFinal.setInscripto(true);
+                            inscriptedFinal.setRecordatorio(usuarioFinal.getRecordatorio());
+                            inscriptedFinal.setIdInscripcion(usuarioFinal.getId());
+                            break;
+                        }
                     }
                 }
                 finalsWithInscriptionFlag.add(inscriptedFinal);
