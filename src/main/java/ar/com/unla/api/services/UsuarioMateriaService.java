@@ -80,8 +80,7 @@ public class UsuarioMateriaService {
 
         List<MateriasInscriptasDTO> subjectsWithInscriptionFlag = new ArrayList<>();
 
-        if ((subjectsByUser != null && !subjectsByUser.isEmpty()) && (allSubjects != null
-                && !allSubjects.isEmpty())) {
+        if (allSubjects != null && !allSubjects.isEmpty()) {
 
             for (Materia materia : allSubjects) {
 
@@ -92,11 +91,13 @@ public class UsuarioMateriaService {
                         materia.getTurno(), materia.getPeriodoInscripcion(),
                         materia.getDias(), false, 0L);
 
-                for (UsuarioMateria usuarioMateria : subjectsByUser) {
-                    if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
-                        inscriptedSubjects.setInscripto(true);
-                        inscriptedSubjects.setIdInscripcion(usuarioMateria.getId());
-                        break;
+                if (subjectsByUser != null && !subjectsByUser.isEmpty()) {
+                    for (UsuarioMateria usuarioMateria : subjectsByUser) {
+                        if (usuarioMateria.getMateria().getId().equals(materia.getId())) {
+                            inscriptedSubjects.setInscripto(true);
+                            inscriptedSubjects.setIdInscripcion(usuarioMateria.getId());
+                            break;
+                        }
                     }
                 }
                 subjectsWithInscriptionFlag.add(inscriptedSubjects);
