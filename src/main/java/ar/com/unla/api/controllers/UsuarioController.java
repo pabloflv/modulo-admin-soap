@@ -95,6 +95,24 @@ public class UsuarioController {
         return new ApplicationResponse<>(usuarioService.findAll(), null);
     }
 
+    @GetMapping(path = "/docentes")
+    @ApiOperation(value = "Se encarga de buscar una lista de usuarios con rol docente")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Usuarios con rol docente encontrados",
+                            response = SwaggerUsuarioFindAllOk.class),
+                    @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
+                            + " usuarios con rol docente", response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al buscar una lista de usuarios con rol docente",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<List<Usuario>> findAllTeachers() {
+        return new ApplicationResponse<>(usuarioService.findAllTeachers(), null);
+    }
+
     @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar un usuario por su id")
     @ApiResponses(

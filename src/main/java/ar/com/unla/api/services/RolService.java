@@ -17,7 +17,7 @@ public class RolService {
 
     public Rol create(RolDTO rolDTO) {
 
-        Rol rol = new Rol(rolDTO.getDescripcion());
+        Rol rol = new Rol(rolDTO.getDescripcion().toLowerCase());
 
         return rolRepository.save(rol);
     }

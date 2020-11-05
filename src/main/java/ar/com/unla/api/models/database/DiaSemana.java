@@ -24,7 +24,7 @@ public class DiaSemana {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @EqualsAndHashCode.Exclude
     @ApiModelProperty(notes = "nombre", required = true, example = "miercoles", position = 4)
     private String nombre;

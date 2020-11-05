@@ -20,7 +20,7 @@ public class DiaSemanaService {
     public DiaSemana create(DiaSemanaDTO diaSemanaDTO) {
 
         DiaSemana diaSemana =
-                new DiaSemana(diaSemanaDTO.getNombre());
+                new DiaSemana(diaSemanaDTO.getNombre().toLowerCase());
 
         return diaSemanaRepository.save(diaSemana);
     }

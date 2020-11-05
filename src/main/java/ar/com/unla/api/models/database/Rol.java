@@ -22,7 +22,7 @@ public class Rol {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @ApiModelProperty(notes = "descripcion", required = true, example = "administrador",
             position = 1)
     private String descripcion;

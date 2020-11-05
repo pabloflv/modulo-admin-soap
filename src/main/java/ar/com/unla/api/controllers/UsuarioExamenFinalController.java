@@ -122,8 +122,21 @@ public class UsuarioExamenFinalController {
             }
     )
 
-    //TODO://lista de usuarios pertenecientes a una materia de rol alumno
-    //TODO:// Agregar handler de los problemas de persistencia
+    //TODO:lista de usuarios pertenecientes a una materia de rol alumno
+    //TODO:lista de usuarios de rol docente
+    //TODO:Agregar handler de los problemas de persistencia
+
+    //TODO:Update materia
+    //TODO:Update compelto de usuario para que lo maneje el admin
+    //TODO:Update datos de contacto de usuario para que lo use el alumno
+    //TODO:Update datos de password
+    //TODO:Update de Inscripciones para que lo maneje el administrador
+
+    //TODO:PDF Analitico para que pueda descargarlo el usuario
+    //TODO:Excel con nombres de alumnos de una materia y su lugar para cargar la nota
+    //TODO:Leer Excel con los alumnos y sus notas y persistirlo en la base
+    //TODO: Hacer lo mismo del Excel pero para examenes finales
+    //TODO: Endpoint para enviar mail de recordatorio
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<UsuarioExamenFinal>> getFinalExamsByUser(
             @RequestParam(name = "idUsuario")

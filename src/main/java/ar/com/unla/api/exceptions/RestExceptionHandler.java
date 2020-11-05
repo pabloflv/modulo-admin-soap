@@ -4,6 +4,7 @@ import ar.com.unla.api.constants.CommonsErrorConstants;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorDetail;
 import ar.com.unla.api.models.response.ErrorResponse;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,12 +13,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +49,50 @@ public abstract class RestExceptionHandler extends ResponseEntityExceptionHandle
     protected String applicationName;
 
     public RestExceptionHandler() {
+    }
+
+    /**
+     * Method that is responsible for caching the errors related to the contraints defined in the
+     * database model, such as @Column(nuleable = false) or @Column(unique = true).
+     */
+    @ExceptionHandler({
+            DataIntegrityViolationException.class
+    })
+    protected ResponseEntity<ApplicationResponse<Object>> handleDataBaseExceptions(
+            Exception ex) {
+
+        String exceptionName =
+                (ex.getCause() != null) ? ex.getCause().getCause()
+                        .getClass().getName() : StringUtils.EMPTY;
+
+        ApplicationResponse<Object> applicationResponse;
+        HttpStatus status;
+        List<String> messages;
+
+        if (SQLIntegrityConstraintViolationException.class.getName().equals(exceptionName)) {
+            status = HttpStatus.BAD_REQUEST;
+
+            org.hibernate.exception.ConstraintViolationException constraintViolationException =
+                    (org.hibernate.exception.ConstraintViolationException)
+                            ex.getCause();
+
+            messages =
+                    Collections.singletonList(
+                            "Error SQL: " + constraintViolationException.getCause().getMessage());
+
+            applicationResponse =
+                    this.getApplicationResponse(CommonsErrorConstants.REQUEST_VALIDATION_ERROR_CODE,
+                            messages);
+
+        } else {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            applicationResponse =
+                    this.getApplicationResponse(CommonsErrorConstants.DEFAULT_SERVICE_ERROR_CODE,
+                            Collections.singletonList(
+                                    CommonsErrorConstants.DEFAULT_SERVICE_ERROR_MESSAGE));
+        }
+
+        return ResponseEntity.status(status).body(applicationResponse);
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
