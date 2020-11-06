@@ -134,7 +134,7 @@ public class UsuarioMateriaController {
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long idUsuario) {
         return new ApplicationResponse<>(
-                usuarioMateriaService.findSubjectsWithInscriptionFlag(idUsuario), null);
+                usuarioMateriaService.findSubjectsAccordingRole(idUsuario), null);
     }
 
     @GetMapping(path = "/materias")

@@ -1,5 +1,6 @@
 package ar.com.unla.api.services;
 
+import ar.com.unla.api.constants.CommonsErrorConstants;
 import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
 import ar.com.unla.api.dtos.response.AlumnoDTO;
 import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
@@ -8,6 +9,7 @@ import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
+import ar.com.unla.api.models.enums.RolesEnum;
 import ar.com.unla.api.repositories.UsuarioExamenFinalRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -91,7 +93,77 @@ public class UsuarioExamenFinalService {
         return usuarioExamenFinalRepository.findFinalExamsByUser(idUsuario);
     }
 
-    public List<FinalesInscriptosDTO> findFinalsWithInscriptionFlag(Long idUsuario) {
+    public List<FinalesInscriptosDTO> findSubjectsAccordingRole(Long idUsuario) {
+        Usuario usuario = usuarioService.findById(idUsuario);
+
+        try {
+            if (RolesEnum.ADMINISTRADOR.name()
+                    .equalsIgnoreCase(usuario.getRol().getDescripcion())) {
+
+                return findFinalsAdmin();
+
+            } else if (RolesEnum.DOCENTE.name()
+                    .equalsIgnoreCase(usuario.getRol().getDescripcion())) {
+
+                return findFinalsTeacher(idUsuario);
+
+            } else if (RolesEnum.ALUMNO.name()
+                    .equalsIgnoreCase(usuario.getRol().getDescripcion())) {
+
+                return findFinalsWithInscriptionStudents(idUsuario);
+
+            } else {
+                throw new NotFoundApiException(CommonsErrorConstants.ROLE_NOT_FOUND_ERROR_MESSAGE);
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException(
+                    String.format(CommonsErrorConstants.LIST_INTERNAL_ERROR_MESSAGE,
+                            "examenes finales"));
+
+        }
+    }
+
+    private List<FinalesInscriptosDTO> findFinalsAdmin() {
+        List<ExamenFinal> finals = examenFinalService.findAll();
+        List<FinalesInscriptosDTO> finalsAdmin = new ArrayList<>();
+
+        if (!finals.isEmpty()) {
+            for (ExamenFinal examen : finals) {
+
+                FinalesInscriptosDTO inscriptedFinal
+                        = new FinalesInscriptosDTO(examen.getId(), examen.getFecha(),
+                        examen.getMateria(), examen.getPeriodoInscripcion()
+                        , null, null, null);
+
+                finalsAdmin.add(inscriptedFinal);
+            }
+        }
+
+        return finalsAdmin;
+    }
+
+    private List<FinalesInscriptosDTO> findFinalsTeacher(Long idUsuario) {
+        List<UsuarioExamenFinal> finalsByUser = findFinalExamsByUser(idUsuario);
+        List<FinalesInscriptosDTO> finalsTeacher = new ArrayList<>();
+
+        if (!finalsByUser.isEmpty()) {
+            for (UsuarioExamenFinal usm : finalsByUser) {
+
+                FinalesInscriptosDTO inscriptedFinal
+                        = new FinalesInscriptosDTO(
+                        usm.getExamenFinal().getId(), usm.getExamenFinal().getFecha(),
+                        usm.getExamenFinal().getMateria(),
+                        usm.getExamenFinal().getPeriodoInscripcion()
+                        , true, usm.getRecordatorio(), usm.getExamenFinal().getId());
+
+                finalsTeacher.add(inscriptedFinal);
+            }
+        }
+
+        return finalsTeacher;
+    }
+
+    private List<FinalesInscriptosDTO> findFinalsWithInscriptionStudents(Long idUsuario) {
         List<UsuarioExamenFinal> finalsByUser = findFinalExamsByUser(idUsuario);
         List<ExamenFinal> allFinals = examenFinalService.findAll();
 
@@ -120,14 +192,17 @@ public class UsuarioExamenFinalService {
 
             finalsWithInscriptionFlag = finalsWithInscriptionFlag.stream()
                     .filter(finales ->
-                            (finales.isInscripto()) ||
-                                    (finales.getPeriodoInscripcion().getFechaHasta()
-                                            .isAfter(LocalDate.now())
-                                            && !finales.isInscripto()) ||
-                                    (finales.getPeriodoInscripcion().getFechaHasta()
-                                            .equals(LocalDate.now()) && !finales.isInscripto())
-                    )
-                    .collect(Collectors.toList());
+                            (finales.getInscripto()) || (!finales.getInscripto() &&
+                                    ((finales.getPeriodoInscripcion().getFechaHasta()
+                                            .isAfter(LocalDate.now()))
+                                            || (finales.getPeriodoInscripcion().getFechaHasta()
+                                            .equals(LocalDate.now())))
+
+                                    && ((finales.getPeriodoInscripcion().getFechaDesde()
+                                    .isBefore(LocalDate.now()))
+                                    || (finales.getPeriodoInscripcion().getFechaDesde()
+                                    .equals(LocalDate.now())))
+                            )).collect(Collectors.toList());
         }
 
         return finalsWithInscriptionFlag;

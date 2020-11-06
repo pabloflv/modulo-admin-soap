@@ -60,13 +60,13 @@ public final class CommonsErrorConstants {
 
     public static final String ALREADY_OWNED_ERROR_CODE = "UNLA-ERR-009";
 
-    public static final String ALREADY_OWNED_ERROR_MESSAGE =
-            "El horario que desea agregar ya existe en la materia";
+    public static final String ROLE_NOT_FOUND_ERROR_MESSAGE =
+            "El rol del usuario indicado es incorrecto";
 
     public static final String NOT_OWNED_ERROR_CODE = "UNLA-ERR-010";
 
-    public static final String NOT_OWNED_ERROR_MESSAGE =
-            "El horario que desea borrar no existe en esta materia";
+    public static final String LIST_INTERNAL_ERROR_MESSAGE =
+            "Error interno al intentar traer una lista de %s";
 
     public static final String LOG_ERROR_MESSAGE = "Messages: {}. Stacktrace: ";
 

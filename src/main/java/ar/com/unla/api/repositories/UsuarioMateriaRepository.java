@@ -16,6 +16,7 @@ public interface UsuarioMateriaRepository extends JpaRepository<UsuarioMateria, 
             + "WHERE m.id = :idMateria AND r.descripcion = 'alumno'")
     List<UsuarioMateria> findStudentBySubject(long idMateria);
 
+
     @Query("SELECT usm FROM UsuarioMateria usm INNER JOIN usm.usuario u INNER "
             + "JOIN usm.materia m WHERE u.id = :idUsuario")
     List<UsuarioMateria> findSubjectsByUser(long idUsuario);
