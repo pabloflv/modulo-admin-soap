@@ -140,11 +140,9 @@ public class UsuarioExamenFinalController {
             + " flag indicando si el usuario en cuestion esta inscripto o no")
     @ApiResponses(
             value = {
-                    @ApiResponse(code = 200, message =
-                            "Examenes finales con flag de inscripción por usuario"
-                                    + "encontrados",
-                            response =
-                                    SwaggerUsuarioExamenFinalInscriptoOK.class),
+                    @ApiResponse(code = 200, message = "Examenes finales con flag de inscripción "
+                            + "por usuario encontrados",
+                            response = SwaggerUsuarioExamenFinalInscriptoOK.class),
                     @ApiResponse(code = 400, message = "Request incorrecta al buscar una lista de"
                             + " examenes finales con flag de inscripción por usuario", response =
                             ErrorResponse.class),
@@ -161,7 +159,7 @@ public class UsuarioExamenFinalController {
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long idUsuario) {
         return new ApplicationResponse<>(
-                usuarioExamenFinalService.findFinalsWithInscriptionFlag(idUsuario),
+                usuarioExamenFinalService.findSubjectsAccordingRole(idUsuario),
                 null);
     }
 

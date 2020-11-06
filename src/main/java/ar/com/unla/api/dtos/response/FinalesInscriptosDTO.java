@@ -25,10 +25,10 @@ public class FinalesInscriptosDTO {
     private PeriodoInscripcion periodoInscripcion;
 
     @ApiModelProperty(notes = "inscripto", position = 4)
-    private boolean inscripto;
+    private Boolean inscripto;
 
     @ApiModelProperty(notes = "recordatorio", position = 5)
-    private boolean recordatorio;
+    private Boolean recordatorio;
 
     @ApiModelProperty(notes = "idInscripcion", position = 9)
     private Long idInscripcion;

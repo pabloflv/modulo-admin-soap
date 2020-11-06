@@ -58,9 +58,9 @@ public class MateriaService {
         Materia materia = materiaRepository
                 .save(new Materia(materiaDTO.getNombre(), profesor, materiaDTO.getCuatrimestre(),
                         materiaDTO.getAnioCarrera(), turno, inscripcionMateria));
-//Probar si funciona
+
         UsuarioMateriaDTO usuarioMateriaDTO =
-                new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f);
+                new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f);
         usuarioMateriaService.create(usuarioMateriaDTO);
 
         materia.getDias().addAll(diasSemana);

@@ -29,7 +29,6 @@ public class MateriasInscriptasDTO {
     @ApiModelProperty(notes = "cuatrimestre", example = "1", position = 3)
     private Integer cuatrimestre;
 
-
     @ApiModelProperty(notes = "anio", example = "2020", position = 4)
     private Integer anioCarrera;
 
@@ -43,7 +42,7 @@ public class MateriasInscriptasDTO {
     private Set<DiaSemana> dias = new HashSet<>();
 
     @ApiModelProperty(notes = "inscripto", position = 8)
-    private boolean inscripto;
+    private Boolean inscripto;
 
     @ApiModelProperty(notes = "idInscripcion", position = 9)
     private Long idInscripcion;

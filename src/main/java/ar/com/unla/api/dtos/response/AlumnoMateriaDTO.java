@@ -9,15 +9,18 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlumnoDTO {
+public class AlumnoMateriaDTO {
 
     @ApiModelProperty(notes = "usuario", position = 1)
     private Usuario usuario;
 
-    @ApiModelProperty(notes = "calificacion", position = 2)
-    private float calificacion;
+    @ApiModelProperty(notes = "calificacionExamen", position = 2)
+    private float calificacionExamen;
 
-    @ApiModelProperty(notes = "idInscripcion", position = 3)
+    @ApiModelProperty(notes = "calificacionTps", position = 3)
+    private float calificacionTps;
+
+    @ApiModelProperty(notes = "idInscripcion", position = 4)
     private Long idInscripcion;
 
 }

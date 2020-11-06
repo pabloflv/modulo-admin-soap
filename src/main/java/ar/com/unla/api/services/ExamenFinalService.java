@@ -1,6 +1,7 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.ExamenFinalDTO;
+import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Materia;
@@ -22,6 +23,9 @@ public class ExamenFinalService {
     @Autowired
     private MateriaService materiaService;
 
+    @Autowired
+    private UsuarioExamenFinalService usuarioExamenFinalService;
+
 
     public ExamenFinal create(ExamenFinalDTO examenFinalDTO) {
 
@@ -32,10 +36,15 @@ public class ExamenFinalService {
 
         Materia materia = materiaService.findById(examenFinalDTO.getIdMateria());
 
-        ExamenFinal examenFinal =
-                new ExamenFinal(examenFinalDTO.getFecha(), materia, inscripcionFinal);
+        ExamenFinal examenFinal = examenFinalRepository
+                .save(new ExamenFinal(examenFinalDTO.getFecha(), materia, inscripcionFinal));
 
-        return examenFinalRepository.save(examenFinal);
+        UsuarioExamenFinalDTO usuarioExamenFinalDTO =
+                new UsuarioExamenFinalDTO(examenFinal.getId(), materia.getProfesor().getId(), false,
+                        0f);
+        usuarioExamenFinalService.create(usuarioExamenFinalDTO);
+
+        return examenFinal;
     }
 
     public ExamenFinal findById(Long id) {

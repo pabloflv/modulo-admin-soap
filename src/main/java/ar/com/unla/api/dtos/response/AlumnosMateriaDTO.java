@@ -16,6 +16,6 @@ public class AlumnosMateriaDTO {
     private Materia materia;
 
     @ApiModelProperty(notes = "alumnos", position = 2)
-    private List<AlumnoDTO> alumnos;
+    private List<AlumnoMateriaDTO> alumnos;
 
 }
