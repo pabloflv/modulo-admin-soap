@@ -2,7 +2,7 @@ package ar.com.unla.api.services;
 
 import ar.com.unla.api.constants.CommonsErrorConstants;
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
-import ar.com.unla.api.dtos.response.AlumnoDTO;
+import ar.com.unla.api.dtos.response.AlumnoMateriaDTO;
 import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
@@ -38,7 +38,8 @@ public class UsuarioMateriaService {
         Usuario usuario = usuarioService.findById(usuarioMateriaDTO.getIdUsuario());
 
         UsuarioMateria usuarioMateria =
-                new UsuarioMateria(materia, usuario, usuarioMateriaDTO.getCalificacion());
+                new UsuarioMateria(materia, usuario, usuarioMateriaDTO.getCalificacionExamen(),
+                        usuarioMateriaDTO.getCalificacionTps());
 
         return usuarioMateriaRepository.save(usuarioMateria);
     }
@@ -63,7 +64,9 @@ public class UsuarioMateriaService {
             alumnosMateriaDTO.setAlumnos(new ArrayList<>());
 
             for (UsuarioMateria um : usuariosMateria) {
-                AlumnoDTO alumno = new AlumnoDTO(um.getUsuario(), um.getCalificacion(), um.getId());
+                AlumnoMateriaDTO alumno =
+                        new AlumnoMateriaDTO(um.getUsuario(), um.getCalificacionExamen(),
+                                um.getCalificacionTps(), um.getId());
                 alumnosMateriaDTO.getAlumnos().add(alumno);
             }
             alumnos.add(alumnosMateriaDTO);
@@ -196,9 +199,11 @@ public class UsuarioMateriaService {
         return subjectsWithInscriptionFlag;
     }
 
-    public UsuarioMateria updateQualification(Long id, float calificacion) {
+    public UsuarioMateria updateQualification(Long id, float calificacionExamen,
+            float calificacionTps) {
         UsuarioMateria usuarioMateria = findById(id);
-        usuarioMateria.setCalificacion(calificacion);
+        usuarioMateria.setCalificacionExamen(calificacionExamen);
+        usuarioMateria.setCalificacionTps(calificacionTps);
         return usuarioMateriaRepository.save(usuarioMateria);
     }
 

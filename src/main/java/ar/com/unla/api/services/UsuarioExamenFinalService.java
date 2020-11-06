@@ -2,7 +2,7 @@ package ar.com.unla.api.services;
 
 import ar.com.unla.api.constants.CommonsErrorConstants;
 import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
-import ar.com.unla.api.dtos.response.AlumnoDTO;
+import ar.com.unla.api.dtos.response.AlumnoFinalDTO;
 import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
 import ar.com.unla.api.dtos.response.FinalesInscriptosDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
@@ -78,8 +78,8 @@ public class UsuarioExamenFinalService {
             alumnosFinalDTO.setAlumnos(new ArrayList<>());
 
             for (UsuarioExamenFinal uex : usuariosFinal) {
-                AlumnoDTO alumno =
-                        new AlumnoDTO(uex.getUsuario(), uex.getCalificacion(), uex.getId());
+                AlumnoFinalDTO alumno =
+                        new AlumnoFinalDTO(uex.getUsuario(), uex.getCalificacion(), uex.getId());
                 alumnosFinalDTO.getAlumnos().add(alumno);
             }
             alumnos.add(alumnosFinalDTO);

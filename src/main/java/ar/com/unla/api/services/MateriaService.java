@@ -60,7 +60,7 @@ public class MateriaService {
                         materiaDTO.getAnioCarrera(), turno, inscripcionMateria));
 
         UsuarioMateriaDTO usuarioMateriaDTO =
-                new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f);
+                new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f);
         usuarioMateriaService.create(usuarioMateriaDTO);
 
         materia.getDias().addAll(diasSemana);

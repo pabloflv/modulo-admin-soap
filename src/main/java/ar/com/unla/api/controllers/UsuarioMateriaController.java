@@ -178,16 +178,27 @@ public class UsuarioMateriaController {
             @RequestParam(name = "idUsuarioMateria")
             @NotNull(message = "El parámetro idUsuarioExamenFinal no esta informado.")
             @ApiParam(required = true) Long id,
-            @RequestParam(name = "calificacion")
-            @NotNull(message = "El parámetro calificación no esta informado.")
+            @RequestParam(name = "calificacionExamen")
+            @NotNull(message = "El parámetro calificacionExamen no esta informado.")
             @Digits(integer = 2, fraction = 2, message =
-                    "El parámetro calificación puede tener {integer} cifras enteras y {fraction} "
-                            + "cifras decimales como máximo.")
-            @Max(value = 10, message = "El parametro calificación no puede ser mayor a {value}")
-            @Min(value = 0, message = "El parametro calificación no puede ser menor a {value}}")
-            @ApiParam(required = true) float calificacion) {
+                    "El parámetro calificacionExamen puede tener {integer} cifras enteras y "
+                            + "{fraction} cifras decimales como máximo.")
+            @Max(value = 10, message = "El parametro calificacionExamen no puede ser mayor a "
+                    + "{value}")
+            @Min(value = 0, message = "El parametro calificacionExamen no puede ser menor a "
+                    + "{value}}")
+            @ApiParam(required = true) float calificacionExamen,
+            @RequestParam(name = "calificacionTps")
+            @NotNull(message = "El parámetro calificacionTps no esta informado.")
+            @Digits(integer = 2, fraction = 2, message =
+                    "El parámetro calificacionTps puede tener {integer} cifras enteras y "
+                            + "{fraction} cifras decimales como máximo.")
+            @Max(value = 10, message = "El parametro calificacionTps no puede ser mayor a {value}")
+            @Min(value = 0, message = "El parametro calificacionTps no puede ser menor a {value}}")
+            @ApiParam(required = true) float calificacionTps) {
         return new ApplicationResponse<>(
-                usuarioMateriaService.updateQualification(id, calificacion), null);
+                usuarioMateriaService.updateQualification(id, calificacionExamen, calificacionTps),
+                null);
     }
 
     @DeleteMapping
