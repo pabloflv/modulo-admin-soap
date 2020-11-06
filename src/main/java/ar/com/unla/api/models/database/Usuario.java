@@ -57,7 +57,7 @@ public class Usuario {
     @ApiModelProperty(notes = "password", required = true, position = 7)
     private String password;
 
-    @Column
+    @Column(length = 3000)
     @ApiModelProperty(notes = "imagen", position = 8)
     private String imagen;
 
