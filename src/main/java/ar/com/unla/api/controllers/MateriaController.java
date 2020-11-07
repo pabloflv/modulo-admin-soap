@@ -1,6 +1,7 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.MateriaDTO;
+import ar.com.unla.api.dtos.request.MateriaInscripcionDTO;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
@@ -100,7 +101,8 @@ public class MateriaController {
     }
 
     @PutMapping
-    @ApiOperation(value = "Se encarga de actualizar datos de una materia")
+    @ApiOperation(value = "Se encarga de actualizar el periodo de inscripcion y los dias de"
+            + "cursada de una materia")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Materia actualizada", response =
@@ -114,13 +116,13 @@ public class MateriaController {
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<Materia> updateSubject(
+    public ApplicationResponse<Materia> updateSubjectIncription(
             @RequestParam(name = "idMateria")
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long id,
-            @Valid @RequestBody MateriaDTO materiaDTO) {
+            @Valid @RequestBody MateriaInscripcionDTO materiaInscripcionDTO) {
         return new ApplicationResponse<>(
-                materiaService.updatesubject(id, materiaDTO), null);
+                materiaService.updateSubjectIncription(id, materiaInscripcionDTO), null);
     }
 
     @DeleteMapping

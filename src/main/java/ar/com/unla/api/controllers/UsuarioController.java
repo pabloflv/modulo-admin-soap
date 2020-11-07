@@ -140,7 +140,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    @ApiOperation(value = "Se encarga de actualizar datos sencibles de un usuario")
+    @ApiOperation(value = "Se encarga de actualizar todos los datos de un usuario")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Usuario actualizado", response =
@@ -158,8 +158,9 @@ public class UsuarioController {
             @RequestParam(name = "idUsuario")
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long id,
-            @Valid @RequestBody DatosSensiblesUsuarioDTO datosSencibles) {
-        return new ApplicationResponse<>(usuarioService.updateSensitiveData(id, datosSencibles),
+            @Valid @RequestBody DatosSensiblesUsuarioDTO datosSensiblesUsuario) {
+        return new ApplicationResponse<>(
+                usuarioService.updateSensitiveData(id, datosSensiblesUsuario),
                 null);
     }
 

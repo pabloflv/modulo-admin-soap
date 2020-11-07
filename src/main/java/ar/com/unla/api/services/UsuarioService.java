@@ -63,15 +63,30 @@ public class UsuarioService {
         return usuarioRepository.findTeacherUsers();
     }
 
-    public Usuario updateSensitiveData(Long id, DatosSensiblesUsuarioDTO datosSensibles) {
+    public Usuario updateSensitiveData(Long id, DatosSensiblesUsuarioDTO datosSensiblesUsuarioDTO) {
         Usuario usuario = findById(id);
-        usuario.setNombre(datosSensibles.getNombre());
-        usuario.setApellido(datosSensibles.getApellido());
-        usuario.setDni(datosSensibles.getDni());
-        usuario.setRol(rolService.findById(datosSensibles.getIdRol()));
-        usuario.setPrimerIngreso(datosSensibles.getPrimerIngreso());
+        usuario.setNombre(datosSensiblesUsuarioDTO.getNombre());
+        usuario.setApellido(datosSensiblesUsuarioDTO.getApellido());
+        usuario.setDni(datosSensiblesUsuarioDTO.getDni());
+        usuario.setRol(rolService.findById(datosSensiblesUsuarioDTO.getIdRol()));
+        usuario.setPrimerIngreso(datosSensiblesUsuarioDTO.getPrimerIngreso());
 
-        return usuarioRepository.save(usuario);
+        long idDireccionAnterior = usuario.getDireccion().getId();
+
+        usuario.setTelefono(datosSensiblesUsuarioDTO.getTelefono());
+
+        Direccion direccion = new Direccion(datosSensiblesUsuarioDTO.getDireccion().getPais(),
+                datosSensiblesUsuarioDTO.getDireccion().getProvincia(),
+                datosSensiblesUsuarioDTO.getDireccion().getLocalidad(),
+                datosSensiblesUsuarioDTO.getDireccion().getCalle());
+
+        usuario.setDireccion(direccion);
+        usuario.setImagen(datosSensiblesUsuarioDTO.getImagen());
+
+        usuario = usuarioRepository.save(usuario);
+
+        direccionService.delete(idDireccionAnterior);
+        return usuario;
     }
 
     public Usuario updateContactInformation(Long id, DatosContactoUsuarioDTO datosContacto) {
@@ -98,17 +113,9 @@ public class UsuarioService {
 
     public String updatePassword(UpdatePassDTO loginUsuario) {
         Usuario usuario = findById(loginUsuario.getIdUsuario());
-/*       if (!usuario.getEmail().equals(loginUsuario.getEmailActual())) {
-            throw new RuntimeException("Email actual incorrecto");
-        }
-
-        usuario.setEmail(loginUsuario.getEmail());
-
-        if (!usuario.getPassword().equals(loginUsuario.getPasswordActual())) {
-            throw new RuntimeException("Contraseña actual incorrecta");
-        }*/
 
         usuario.setPassword(loginUsuario.getPassword());
+        usuario.setPrimerIngreso(false);
 
         usuarioRepository.save(usuario);
 
