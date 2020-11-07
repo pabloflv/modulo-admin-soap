@@ -11,13 +11,16 @@ import ar.com.unla.api.models.response.ErrorResponse;
 import ar.com.unla.api.models.swagger.usuario.SwaggerUsuarioFindAllOk;
 import ar.com.unla.api.models.swagger.usuario.SwaggerUsuarioOk;
 import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
+import ar.com.unla.api.services.AnaliticoService;
 import ar.com.unla.api.services.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.io.IOException;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private AnaliticoService analiticoService;
 
     @PostMapping
     @ApiOperation(value = "Se encarga de crear y persistir un usuario")
@@ -229,5 +235,16 @@ public class UsuarioController {
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long id) {
         usuarioService.delete(id);
+    }
+
+    @GetMapping("/analitico-pdf")
+    @ApiOperation(value = "Se encarga de generar un pdf con el anaítico academico de un usuario "
+            + "particular )")
+    public void exportToPDF(
+            @RequestParam(name = "idUsuario")
+            @NotNull(message = "El parámetro idUsuario no esta informado.")
+            @ApiParam(required = true) Long id
+            , HttpServletResponse response) throws IOException {
+        analiticoService.exportToPDF(response, id);
     }
 }
