@@ -49,6 +49,7 @@ public class UsuarioDTO {
     @ApiModelProperty(required = true, position = 7)
     private DireccionDTO direccion;
 
+    @Size(max = 2000000000, message = CommonsErrorConstants.INCORRECT_SIZE_IMAGE_MESSAGE)
     @ApiModelProperty(position = 8)
     private String imagen;
 

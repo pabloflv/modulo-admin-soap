@@ -57,7 +57,7 @@ public class Usuario {
     @ApiModelProperty(notes = "password", required = true, position = 7)
     private String password;
 
-    @Column(length = 2000000000, columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "LONGTEXT")
     @ApiModelProperty(notes = "imagen", position = 8)
     private String imagen;
 

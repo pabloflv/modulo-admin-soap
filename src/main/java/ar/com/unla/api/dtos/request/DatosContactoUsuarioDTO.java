@@ -7,6 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +30,7 @@ public class DatosContactoUsuarioDTO {
     @ApiModelProperty(required = true, position = 3)
     private DireccionDTO direccion;
 
+    @Size(max = 2000000000, message = CommonsErrorConstants.INCORRECT_SIZE_IMAGE_MESSAGE)
     @ApiModelProperty(position = 4)
     private String imagen;
 }

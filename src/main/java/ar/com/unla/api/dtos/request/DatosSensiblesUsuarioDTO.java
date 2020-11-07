@@ -38,6 +38,7 @@ public class DatosSensiblesUsuarioDTO {
     @ApiModelProperty(required = true, position = 6)
     private DireccionDTO direccion;
 
+    @Size(max = 2000000000, message = CommonsErrorConstants.INCORRECT_SIZE_IMAGE_MESSAGE)
     @ApiModelProperty(position = 7)
     private String imagen;
 
