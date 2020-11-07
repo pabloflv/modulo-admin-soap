@@ -83,7 +83,7 @@ public class UsuarioController {
         return new ApplicationResponse<>(usuarioService.findById(id), null);
     }
 
-    @GetMapping(path = "/login")
+    @PostMapping(path = "/login")
     @ApiOperation(value = "Se encarga de buscar un usuario por su usuario y contraseña")
     @ApiResponses(
             value = {
