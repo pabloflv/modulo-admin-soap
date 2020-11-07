@@ -16,12 +16,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Api(tags = "Usuario-Materia controller", description = "CRUD UsuarioMateria")
 @Validated
@@ -220,5 +226,24 @@ public class UsuarioMateriaController {
             @NotNull(message = "El parámetro idUsuarioMateria no esta informado.")
             @ApiParam(required = true) Long id) {
         usuarioMateriaService.delete(id);
+    }
+
+    @PostMapping("/notas-excel")
+    public void mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile)
+            throws IOException {
+
+        List<UsuarioMateria> tempStudentList = new ArrayList<>();
+        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
+        XSSFSheet worksheet = workbook.getSheetAt(0);
+
+        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+            UsuarioMateria usuarioMateria = new UsuarioMateria();
+
+            XSSFRow row = worksheet.getRow(i);
+/*
+            tempStudent.setId((int) row.getCell(0).getNumericCellValue());
+            tempStudent.setContent(row.getCell(1).getStringCellValue());
+            tempStudentList.add(tempStudent);  */
+        }
     }
 }
