@@ -1,7 +1,6 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.DatosContactoUsuarioDTO;
-import ar.com.unla.api.dtos.request.DatosSensiblesUsuarioDTO;
 import ar.com.unla.api.dtos.request.LoginUsuarioDTO;
 import ar.com.unla.api.dtos.request.UpdatePassDTO;
 import ar.com.unla.api.dtos.request.UsuarioDTO;
@@ -63,15 +62,31 @@ public class UsuarioService {
         return usuarioRepository.findTeacherUsers();
     }
 
-    public Usuario updateSensitiveData(Long id, DatosSensiblesUsuarioDTO datosSensibles) {
+    public Usuario updateSensitiveData(Long id, UsuarioDTO usuarioDTO) {
         Usuario usuario = findById(id);
-        usuario.setNombre(datosSensibles.getNombre());
-        usuario.setApellido(datosSensibles.getApellido());
-        usuario.setDni(datosSensibles.getDni());
-        usuario.setRol(rolService.findById(datosSensibles.getIdRol()));
-        usuario.setPrimerIngreso(datosSensibles.getPrimerIngreso());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setDni(usuarioDTO.getDni());
+        usuario.setRol(rolService.findById(usuarioDTO.getIdRol()));
+        usuario.setPrimerIngreso(usuarioDTO.getPrimerIngreso());
 
-        return usuarioRepository.save(usuario);
+        long idDireccionAnterior = usuario.getDireccion().getId();
+
+        usuario.setTelefono(usuarioDTO.getTelefono());
+        usuario.setEmail(usuarioDTO.getEmail());
+
+        Direccion direccion = new Direccion(usuarioDTO.getDireccion().getPais(),
+                usuarioDTO.getDireccion().getProvincia(),
+                usuarioDTO.getDireccion().getLocalidad(),
+                usuarioDTO.getDireccion().getCalle());
+
+        usuario.setDireccion(direccion);
+        usuario.setImagen(usuarioDTO.getImagen());
+
+        usuario = usuarioRepository.save(usuario);
+
+        direccionService.delete(idDireccionAnterior);
+        return usuario;
     }
 
     public Usuario updateContactInformation(Long id, DatosContactoUsuarioDTO datosContacto) {
@@ -98,17 +113,9 @@ public class UsuarioService {
 
     public String updatePassword(UpdatePassDTO loginUsuario) {
         Usuario usuario = findById(loginUsuario.getIdUsuario());
-/*       if (!usuario.getEmail().equals(loginUsuario.getEmailActual())) {
-            throw new RuntimeException("Email actual incorrecto");
-        }
-
-        usuario.setEmail(loginUsuario.getEmail());
-
-        if (!usuario.getPassword().equals(loginUsuario.getPasswordActual())) {
-            throw new RuntimeException("Contraseña actual incorrecta");
-        }*/
 
         usuario.setPassword(loginUsuario.getPassword());
+        usuario.setPrimerIngreso(false);
 
         usuarioRepository.save(usuario);
 

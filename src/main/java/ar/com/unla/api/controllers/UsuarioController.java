@@ -1,7 +1,6 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.DatosContactoUsuarioDTO;
-import ar.com.unla.api.dtos.request.DatosSensiblesUsuarioDTO;
 import ar.com.unla.api.dtos.request.LoginUsuarioDTO;
 import ar.com.unla.api.dtos.request.UpdatePassDTO;
 import ar.com.unla.api.dtos.request.UsuarioDTO;
@@ -140,7 +139,7 @@ public class UsuarioController {
     }
 
     @PutMapping
-    @ApiOperation(value = "Se encarga de actualizar datos sencibles de un usuario")
+    @ApiOperation(value = "Se encarga de actualizar todos los datos de un usuario")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Usuario actualizado", response =
@@ -158,8 +157,8 @@ public class UsuarioController {
             @RequestParam(name = "idUsuario")
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long id,
-            @Valid @RequestBody DatosSensiblesUsuarioDTO datosSencibles) {
-        return new ApplicationResponse<>(usuarioService.updateSensitiveData(id, datosSencibles),
+            @Valid @RequestBody UsuarioDTO usuarioDTO) {
+        return new ApplicationResponse<>(usuarioService.updateSensitiveData(id, usuarioDTO),
                 null);
     }
 
