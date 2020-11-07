@@ -23,8 +23,9 @@ public interface UsuarioMateriaRepository extends JpaRepository<UsuarioMateria, 
             + "INNER JOIN usm.materia m "
             + "INNER JOIN m.turno t "
             + "WHERE m.id = :idMateria AND u.id = :idUsuario "
-            + "AND LOWER(t.descripcion) = :descripcion")
-    Optional<UsuarioMateria> findUserSubject(long idMateria, long idUsuario, String descripcion);
+            + "AND LOWER(t.descripcion) = :descripcionTurno")
+    Optional<UsuarioMateria> findUserSubject(long idMateria, long idUsuario,
+            String descripcionTurno);
 
 
     @Query("SELECT usm FROM UsuarioMateria usm INNER JOIN usm.usuario u INNER "

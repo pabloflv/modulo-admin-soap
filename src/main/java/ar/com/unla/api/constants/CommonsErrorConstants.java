@@ -43,6 +43,9 @@ public final class CommonsErrorConstants {
     public static final String INCORRECT_MAIL_MESSAGE =
             "El mail ingresado no tiene el formato correcto";
 
+    public static final String INCORRECT_SIZE_IMAGE_MESSAGE =
+            "La imagen ingresado supera el tamaño esperado";
+
     public static final String SIZE_DOCUMENT_NUMBER_ERROR =
             "El parámetro dni no debe tener más de {max} caracteres.";
 
