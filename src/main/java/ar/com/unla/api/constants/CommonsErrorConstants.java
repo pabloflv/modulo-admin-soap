@@ -58,12 +58,10 @@ public final class CommonsErrorConstants {
 
     public static final String SEARCH_NOT_FOUND_ERROR_CODE = "UNLA-ERR-008";
 
-    public static final String ALREADY_OWNED_ERROR_CODE = "UNLA-ERR-009";
+    public static final String LOCKED_TRANSACTION_ERROR_CODE = "UNLA-ERR-09";
 
     public static final String ROLE_NOT_FOUND_ERROR_MESSAGE =
             "El rol del usuario indicado es incorrecto";
-
-    public static final String NOT_OWNED_ERROR_CODE = "UNLA-ERR-010";
 
     public static final String LIST_INTERNAL_ERROR_MESSAGE =
             "Error interno al intentar traer una lista de %s";

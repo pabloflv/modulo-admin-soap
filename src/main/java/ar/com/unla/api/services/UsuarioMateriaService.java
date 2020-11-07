@@ -51,6 +51,12 @@ public class UsuarioMateriaService {
                                 + "indicado."));
     }
 
+    public UsuarioMateria findByUserAndSubject(Long idMateria, Long idUsuario, String descripcion) {
+        return usuarioMateriaRepository.findUserSubject(idMateria, idUsuario, descripcion)
+                .orElseThrow(() -> new NotFoundApiException(
+                        "No se encontro el UsuarioMateria indicado."));
+    }
+
     public List<AlumnosMateriaDTO> findStudentsBySubject(Long idMateria) {
         materiaService.findById(idMateria);
         List<UsuarioMateria> usuariosMateria =

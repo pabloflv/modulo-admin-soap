@@ -1,11 +1,16 @@
 package ar.com.unla.api.controllers;
 
+import ar.com.unla.api.dtos.request.DatosContactoUsuarioDTO;
+import ar.com.unla.api.dtos.request.DatosSensiblesUsuarioDTO;
+import ar.com.unla.api.dtos.request.LoginUsuarioDTO;
+import ar.com.unla.api.dtos.request.UpdatePassDTO;
 import ar.com.unla.api.dtos.request.UsuarioDTO;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
 import ar.com.unla.api.models.swagger.usuario.SwaggerUsuarioFindAllOk;
 import ar.com.unla.api.models.swagger.usuario.SwaggerUsuarioOk;
+import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
 import ar.com.unla.api.services.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +27,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,6 +83,26 @@ public class UsuarioController {
         return new ApplicationResponse<>(usuarioService.findById(id), null);
     }
 
+    @GetMapping(path = "/login")
+    @ApiOperation(value = "Se encarga de buscar un usuario por su usuario y contraseña")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Usuario encontrado", response =
+                            SwaggerUsuarioOk.class),
+                    @ApiResponse(code = 400, message = "Request incorrecta al buscar un Usuario "
+                            + "por su id",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message = "Error interno al buscar un Usuario por su"
+                            + " id",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<Usuario> findByEmailAndPass(
+            @Valid @RequestBody LoginUsuarioDTO loginUsuario) {
+        return new ApplicationResponse<>(usuarioService.findByEmailAndPass(loginUsuario), null);
+    }
+
     @GetMapping(path = "/all")
     @ApiOperation(value = "Se encarga de buscar una lista de usuarios")
     @ApiResponses(
@@ -112,6 +138,76 @@ public class UsuarioController {
     public ApplicationResponse<List<Usuario>> findAllTeachers() {
         return new ApplicationResponse<>(usuarioService.findAllTeachers(), null);
     }
+
+    @PutMapping
+    @ApiOperation(value = "Se encarga de actualizar datos sencibles de un usuario")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Usuario actualizado", response =
+                            SwaggerUsuarioFinalOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar un usuario",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar un usuario",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<Usuario> updateSensitiveData(
+            @RequestParam(name = "idUsuario")
+            @NotNull(message = "El parámetro idUsuario no esta informado.")
+            @ApiParam(required = true) Long id,
+            @Valid @RequestBody DatosSensiblesUsuarioDTO datosSencibles) {
+        return new ApplicationResponse<>(usuarioService.updateSensitiveData(id, datosSencibles),
+                null);
+    }
+
+    @PutMapping(path = "/datos-contacto")
+    @ApiOperation(value = "Se encarga de actualizar datos de contacto de un usuario")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Usuario actualizado", response =
+                            SwaggerUsuarioFinalOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar un usuario",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar un usuario",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<Usuario> updateContactInformation(
+            @RequestParam(name = "idUsuario")
+            @NotNull(message = "El parámetro idUsuario no esta informado.")
+            @ApiParam(required = true) Long id,
+            @Valid @RequestBody DatosContactoUsuarioDTO datosContacto) {
+        return new ApplicationResponse<>(usuarioService.updateContactInformation(id, datosContacto),
+                null);
+    }
+
+    @PutMapping(path = "/password")
+    @ApiOperation(value = "Se encarga de actualizar datos de login de un usuario")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Usuario actualizado", response =
+                            SwaggerUsuarioFinalOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar un usuario",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar un usuario",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<String> updatePassword(
+            @Valid @RequestBody UpdatePassDTO loginUsuario) {
+        return new ApplicationResponse<>(
+                usuarioService.updatePassword(loginUsuario), null);
+    }
+
 
     @DeleteMapping
     @ApiOperation(value = "Se encarga eliminar un usuario por su id")

@@ -12,8 +12,7 @@ public class CustomRestExceptionHandler extends RestExceptionHandler {
 
     @ExceptionHandler({
             NotFoundApiException.class,
-            HorarioMateriaAlreadyOwnedException.class,
-            HorarioMateriaNotOwnedException.class
+            TransactionBlockedException.class
     })
     protected ResponseEntity<ApplicationResponse<Object>> handleValidationOkResponseExceptions(
             GeneralApiException generalApiException) {

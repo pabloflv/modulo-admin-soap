@@ -6,6 +6,7 @@ import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
 import ar.com.unla.api.models.swagger.materia.SwaggerMateriaFindAllOk;
 import ar.com.unla.api.models.swagger.materia.SwaggerMateriaOk;
+import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
 import ar.com.unla.api.services.MateriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -95,6 +97,30 @@ public class MateriaController {
     @ResponseStatus(HttpStatus.OK)
     public ApplicationResponse<List<Materia>> findAll() {
         return new ApplicationResponse<>(materiaService.findAll(), null);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "Se encarga de actualizar datos de una materia")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Materia actualizada", response =
+                            SwaggerUsuarioFinalOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar una materia",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar una materia",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<Materia> updateSubject(
+            @RequestParam(name = "idMateria")
+            @NotNull(message = "El parámetro idMateria no esta informado.")
+            @ApiParam(required = true) Long id,
+            @Valid @RequestBody MateriaDTO materiaDTO) {
+        return new ApplicationResponse<>(
+                materiaService.updatesubject(id, materiaDTO), null);
     }
 
     @DeleteMapping
