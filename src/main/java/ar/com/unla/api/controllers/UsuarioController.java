@@ -1,6 +1,7 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.DatosContactoUsuarioDTO;
+import ar.com.unla.api.dtos.request.DatosSensiblesUsuarioDTO;
 import ar.com.unla.api.dtos.request.LoginUsuarioDTO;
 import ar.com.unla.api.dtos.request.UpdatePassDTO;
 import ar.com.unla.api.dtos.request.UsuarioDTO;
@@ -157,8 +158,9 @@ public class UsuarioController {
             @RequestParam(name = "idUsuario")
             @NotNull(message = "El parámetro idUsuario no esta informado.")
             @ApiParam(required = true) Long id,
-            @Valid @RequestBody UsuarioDTO usuarioDTO) {
-        return new ApplicationResponse<>(usuarioService.updateSensitiveData(id, usuarioDTO),
+            @Valid @RequestBody DatosSensiblesUsuarioDTO datosSensiblesUsuario) {
+        return new ApplicationResponse<>(
+                usuarioService.updateSensitiveData(id, datosSensiblesUsuario),
                 null);
     }
 

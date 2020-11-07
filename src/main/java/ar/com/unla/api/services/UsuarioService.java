@@ -1,6 +1,7 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.DatosContactoUsuarioDTO;
+import ar.com.unla.api.dtos.request.DatosSensiblesUsuarioDTO;
 import ar.com.unla.api.dtos.request.LoginUsuarioDTO;
 import ar.com.unla.api.dtos.request.UpdatePassDTO;
 import ar.com.unla.api.dtos.request.UsuarioDTO;
@@ -62,26 +63,25 @@ public class UsuarioService {
         return usuarioRepository.findTeacherUsers();
     }
 
-    public Usuario updateSensitiveData(Long id, UsuarioDTO usuarioDTO) {
+    public Usuario updateSensitiveData(Long id, DatosSensiblesUsuarioDTO datosSensiblesUsuarioDTO) {
         Usuario usuario = findById(id);
-        usuario.setNombre(usuarioDTO.getNombre());
-        usuario.setApellido(usuarioDTO.getApellido());
-        usuario.setDni(usuarioDTO.getDni());
-        usuario.setRol(rolService.findById(usuarioDTO.getIdRol()));
-        usuario.setPrimerIngreso(usuarioDTO.getPrimerIngreso());
+        usuario.setNombre(datosSensiblesUsuarioDTO.getNombre());
+        usuario.setApellido(datosSensiblesUsuarioDTO.getApellido());
+        usuario.setDni(datosSensiblesUsuarioDTO.getDni());
+        usuario.setRol(rolService.findById(datosSensiblesUsuarioDTO.getIdRol()));
+        usuario.setPrimerIngreso(datosSensiblesUsuarioDTO.getPrimerIngreso());
 
         long idDireccionAnterior = usuario.getDireccion().getId();
 
-        usuario.setTelefono(usuarioDTO.getTelefono());
-        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setTelefono(datosSensiblesUsuarioDTO.getTelefono());
 
-        Direccion direccion = new Direccion(usuarioDTO.getDireccion().getPais(),
-                usuarioDTO.getDireccion().getProvincia(),
-                usuarioDTO.getDireccion().getLocalidad(),
-                usuarioDTO.getDireccion().getCalle());
+        Direccion direccion = new Direccion(datosSensiblesUsuarioDTO.getDireccion().getPais(),
+                datosSensiblesUsuarioDTO.getDireccion().getProvincia(),
+                datosSensiblesUsuarioDTO.getDireccion().getLocalidad(),
+                datosSensiblesUsuarioDTO.getDireccion().getCalle());
 
         usuario.setDireccion(direccion);
-        usuario.setImagen(usuarioDTO.getImagen());
+        usuario.setImagen(datosSensiblesUsuarioDTO.getImagen());
 
         usuario = usuarioRepository.save(usuario);
 
