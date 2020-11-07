@@ -6,6 +6,7 @@ import ar.com.unla.api.dtos.request.LoginUsuarioDTO;
 import ar.com.unla.api.dtos.request.UpdatePassDTO;
 import ar.com.unla.api.dtos.request.UsuarioDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
+import ar.com.unla.api.exceptions.TransactionBlockedException;
 import ar.com.unla.api.models.database.Direccion;
 import ar.com.unla.api.models.database.Rol;
 import ar.com.unla.api.models.database.Usuario;
@@ -115,7 +116,13 @@ public class UsuarioService {
     }
 
     public void delete(Long id) {
-        findById(id);
-        usuarioRepository.deleteById(id);
+        try {
+            findById(id);
+            usuarioRepository.deleteById(id);
+        } catch (RuntimeException e) {
+            throw new TransactionBlockedException(
+                    "No se puede eliminar el usuario porque esta relacionado a otros elementos de"
+                            + " la aplicación");
+        }
     }
 }

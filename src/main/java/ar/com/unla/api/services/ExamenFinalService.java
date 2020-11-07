@@ -3,6 +3,7 @@ package ar.com.unla.api.services;
 import ar.com.unla.api.dtos.request.ExamenFinalDTO;
 import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
+import ar.com.unla.api.exceptions.TransactionBlockedException;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
@@ -58,8 +59,15 @@ public class ExamenFinalService {
     }
 
     public void delete(Long id) {
-        findById(id);
-        examenFinalRepository.deleteById(id);
+        try {
+            findById(id);
+            examenFinalRepository.deleteById(id);
+
+        } catch (RuntimeException e) {
+            throw new TransactionBlockedException(
+                    "No se puede eliminar el examen final porque esta relacionado a otros "
+                            + "elementos de la aplicación");
+        }
     }
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
