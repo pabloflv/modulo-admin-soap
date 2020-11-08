@@ -1,6 +1,7 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.constants.CommonsErrorConstants;
+import ar.com.unla.api.dtos.request.ExcelDTO;
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
 import ar.com.unla.api.dtos.response.AlumnoMateriaDTO;
 import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
@@ -56,8 +57,9 @@ public class UsuarioMateriaService {
                                 + "indicado."));
     }
 
-    public UsuarioMateria findByUserAndSubject(Long idMateria, Long idUsuario, String descripcion) {
-        return usuarioMateriaRepository.findUserSubject(idMateria, idUsuario, descripcion)
+    public UsuarioMateria findByUserAndSubject(Long idMateria, Long idUsuario,
+            String descripcionTurno) {
+        return usuarioMateriaRepository.findUserSubject(idMateria, idUsuario, descripcionTurno)
                 .orElseThrow(() -> new NotFoundApiException(
                         "No se encontro el UsuarioMateria indicado."));
     }
@@ -238,6 +240,42 @@ public class UsuarioMateriaService {
             throw new ExcelEmptyException(
                     "Descarga fallida. La materia no tiene alumnos inscriptos");
         }
+    }
+
+
+    public String importByExcel(ExcelDTO excelDTO) {
+        try {
+            String tituloExcel = excelDTO.getExcel().get(0).get(0);
+
+            String[] materia = tituloExcel.split("-");
+            long idMateria = Integer.parseInt(materia[1].trim());
+
+            Materia mat = materiaService.findById(idMateria);
+
+            for (int i = 2; i < excelDTO.getExcel().size(); i++) {
+                long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
+                usuarioService.findById(idUsuario);
+
+                String tp = excelDTO.getExcel().get(i).get(3).replace(",", ".");
+                String parcial = excelDTO.getExcel().get(i).get(4).replace(",", ".");
+
+                float notaTp = (!tp.isEmpty()) ? Float.parseFloat(tp) : 0;
+
+                float notaParcial =
+                        (!parcial.isEmpty()) ? Float.parseFloat(parcial) : 0;
+
+                UsuarioMateria usuarioMateria =
+                        findByUserAndSubject(idMateria, idUsuario, mat.getTurno().getDescripcion());
+
+                updateQualification(usuarioMateria.getId(),
+                        (float) (Math.round(notaParcial * 100d) / 100d),
+                        (float) (Math.round(notaTp * 100d) / 100d));
+            }
+        } catch (RuntimeException e) {
+            throw new ExcelEmptyException("El excel adjunto no cumple con el formato correcto");
+        }
+
+        return "Calificaciones actualizadas con éxito";
     }
 
     public void delete(Long id) {

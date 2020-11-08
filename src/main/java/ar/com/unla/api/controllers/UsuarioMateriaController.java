@@ -1,5 +1,6 @@
 package ar.com.unla.api.controllers;
 
+import ar.com.unla.api.dtos.request.ExcelDTO;
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
 import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
@@ -224,6 +225,27 @@ public class UsuarioMateriaController {
             throws IOException, DecoderException {
 
         usuarioMateriaService.exportToExcel(response, idMateria);
+    }
+
+    @PutMapping("/notas-excel")
+    @ApiOperation(value = "Se encarga obtener los datos de un excel con la lista de alumnos de "
+            + "una materia y actualizar las notas de esos alumnos en la base de datos")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Calificaciones actualizadas correctamente"),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al leer un excel con la lista de alumnos",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error al intentar al leer un excel con la lista de alumnos",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<String> qualificationExcelImport(
+            @Valid @RequestBody ExcelDTO excelDTO) {
+        return new ApplicationResponse<>(
+                usuarioMateriaService.importByExcel(excelDTO), null);
     }
 
     @DeleteMapping
