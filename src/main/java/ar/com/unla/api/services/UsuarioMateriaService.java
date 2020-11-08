@@ -253,23 +253,27 @@ public class UsuarioMateriaService {
             Materia mat = materiaService.findById(idMateria);
 
             for (int i = 2; i < excelDTO.getExcel().size(); i++) {
-                long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
-                usuarioService.findById(idUsuario);
+                if (excelDTO.getExcel().get(i).get(0) != null && !excelDTO.getExcel().get(i).get(0)
+                        .isEmpty()) {
+                    long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
+                    usuarioService.findById(idUsuario);
 
-                String tp = excelDTO.getExcel().get(i).get(3).replace(",", ".");
-                String parcial = excelDTO.getExcel().get(i).get(4).replace(",", ".");
+                    String tp = excelDTO.getExcel().get(i).get(3).replace(",", ".");
+                    String parcial = excelDTO.getExcel().get(i).get(4).replace(",", ".");
 
-                float notaTp = (!tp.isEmpty()) ? Float.parseFloat(tp) : 0;
+                    float notaTp = (!tp.isEmpty()) ? Float.parseFloat(tp) : 0;
 
-                float notaParcial =
-                        (!parcial.isEmpty()) ? Float.parseFloat(parcial) : 0;
+                    float notaParcial =
+                            (!parcial.isEmpty()) ? Float.parseFloat(parcial) : 0;
 
-                UsuarioMateria usuarioMateria =
-                        findByUserAndSubject(idMateria, idUsuario, mat.getTurno().getDescripcion());
+                    UsuarioMateria usuarioMateria =
+                            findByUserAndSubject(idMateria, idUsuario,
+                                    mat.getTurno().getDescripcion());
 
-                updateQualification(usuarioMateria.getId(),
-                        (float) (Math.round(notaParcial * 100d) / 100d),
-                        (float) (Math.round(notaTp * 100d) / 100d));
+                    updateQualification(usuarioMateria.getId(),
+                            (float) (Math.round(notaParcial * 100d) / 100d),
+                            (float) (Math.round(notaTp * 100d) / 100d));
+                }
             }
         } catch (RuntimeException e) {
             throw new ExcelEmptyException("El excel adjunto no cumple con el formato correcto");

@@ -247,22 +247,26 @@ public class UsuarioExamenFinalService {
             Materia mat = materiaService.findById(idMateria);
 
             for (int i = 2; i < excelDTO.getExcel().size(); i++) {
-                long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
-                usuarioService.findById(idUsuario);
+                if (excelDTO.getExcel().get(i).get(0) != null && !excelDTO.getExcel().get(i).get(0)
+                        .isEmpty()) {
+                    long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
+                    usuarioService.findById(idUsuario);
 
-                String examenFinal = excelDTO.getExcel().get(i).get(3).replace(",", ".");
+                    String examenFinal = excelDTO.getExcel().get(i).get(3).replace(",", ".");
 
-                float notaFinal =
-                        (!examenFinal.isEmpty()) ? Float.parseFloat(examenFinal) : 0;
+                    float notaFinal =
+                            (!examenFinal.isEmpty()) ? Float.parseFloat(examenFinal) : 0;
 
-                UsuarioExamenFinal usuarioExamenFinal =
-                        usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario,
-                                mat.getTurno().getDescripcion())
-                                .orElseThrow(() -> new NotFoundApiException(
-                                        "No se encontro el examen final del usuario indicado."));
+                    UsuarioExamenFinal usuarioExamenFinal =
+                            usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario,
+                                    mat.getTurno().getDescripcion())
+                                    .orElseThrow(() -> new NotFoundApiException(
+                                            "No se encontro el examen final del usuario indicado"
+                                                    + "."));
 
-                updateQualification(usuarioExamenFinal.getId(),
-                        (float) (Math.round(notaFinal * 100d) / 100d));
+                    updateQualification(usuarioExamenFinal.getId(),
+                            (float) (Math.round(notaFinal * 100d) / 100d));
+                }
             }
         } catch (RuntimeException e) {
             throw new ExcelEmptyException("El excel adjunto no cumple con el formato correcto");
