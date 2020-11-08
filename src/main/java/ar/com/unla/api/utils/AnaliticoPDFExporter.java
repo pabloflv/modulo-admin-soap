@@ -39,7 +39,7 @@ public class AnaliticoPDFExporter {
 
         document.open();
 
-        writeTableTitle(document, "Analítico UNLa");
+        writeTableTitle(document, "Informe Analítico UNLa");
 
         PdfPTable tabla = new PdfPTable(7);
         tabla.setWidthPercentage(100);
@@ -80,19 +80,19 @@ public class AnaliticoPDFExporter {
         cell.setPhrase(new Phrase("Materia", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Nota TP", font));
+        cell.setPhrase(new Phrase("TP", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Nota Parcial", font));
+        cell.setPhrase(new Phrase("Parcial", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Promedio Materia", font));
+        cell.setPhrase(new Phrase("Promedio", font));
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("Condición", font));
         table.addCell(cell);
 
-        cell.setPhrase(new Phrase("Nota final", font));
+        cell.setPhrase(new Phrase("Final", font));
         table.addCell(cell);
 
         cell.setPhrase(new Phrase("Promedio General", font));
@@ -107,7 +107,7 @@ public class AnaliticoPDFExporter {
 
         PdfPCell cell = new PdfPCell();
         cell.setHorizontalAlignment(Paragraph.ALIGN_CENTER);
-
+        cell.setPadding(10);
         if ((finales != null && !finales.isEmpty()) && (materias != null)) {
 
             for (UsuarioExamenFinal usuarioExamenFinal : Collections.unmodifiableList(finales)) {
