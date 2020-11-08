@@ -16,12 +16,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.io.IOException;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -219,6 +222,28 @@ public class UsuarioExamenFinalController {
             @ApiParam(required = true) float calificacion) {
         return new ApplicationResponse<>(
                 usuarioExamenFinalService.updateQualification(id, calificacion), null);
+    }
+
+    @GetMapping("/notas-excel")
+    @ApiOperation(value = "Se encarga de generar un excel con el listado de alumnos de un final")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Excel generado correctamente"),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al generar un excel con la lista de alumnos",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error al intentar generar un excel con la lista de alumnos",
+                            response = ErrorResponse.class)
+            }
+    )
+    public void qualificationExcelExport(HttpServletResponse response,
+            @RequestParam(name = "idMateria")
+            @NotNull(message = "El parámetro idMateria no esta informado.")
+            @ApiParam(required = true) Long idMateria)
+            throws IOException, DecoderException {
+
+        usuarioExamenFinalService.exportToExcel(response, idMateria);
     }
 
     @DeleteMapping

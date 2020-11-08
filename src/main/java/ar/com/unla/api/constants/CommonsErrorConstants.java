@@ -63,6 +63,8 @@ public final class CommonsErrorConstants {
 
     public static final String LOCKED_TRANSACTION_ERROR_CODE = "UNLA-ERR-09";
 
+    public static final String EXCEL_EMPTY_ERROR_CODE = "UNLA-ERR-10";
+
     public static final String ROLE_NOT_FOUND_ERROR_MESSAGE =
             "El rol del usuario indicado es incorrecto";
 

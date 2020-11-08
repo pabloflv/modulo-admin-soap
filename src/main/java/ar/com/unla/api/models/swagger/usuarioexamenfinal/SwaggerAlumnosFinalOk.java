@@ -1,6 +1,7 @@
 package ar.com.unla.api.models.swagger.usuarioexamenfinal;
 
 import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -9,5 +10,5 @@ import lombok.Data;
 @Data
 public final class SwaggerAlumnosFinalOk {
 
-    private AlumnosFinalDTO data;
+    private List<AlumnosFinalDTO> data;
 }

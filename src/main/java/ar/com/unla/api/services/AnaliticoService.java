@@ -24,7 +24,7 @@ public class AnaliticoService {
 
     public void exportToPDF(HttpServletResponse response, long idUsuario) throws IOException {
         response.setContentType("application/pdf");
-        String headerKey = "Content-Disposittion";
+        String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=AnaliticoUNLa.pdf";
 
         response.setHeader(headerKey, headerValue);

@@ -5,16 +5,22 @@ import ar.com.unla.api.dtos.request.UsuarioExamenFinalDTO;
 import ar.com.unla.api.dtos.response.AlumnoFinalDTO;
 import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
 import ar.com.unla.api.dtos.response.FinalesInscriptosDTO;
+import ar.com.unla.api.exceptions.ExcelEmptyException;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.ExamenFinal;
+import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.models.enums.RolesEnum;
 import ar.com.unla.api.repositories.UsuarioExamenFinalRepository;
+import ar.com.unla.api.utils.AlumnosFinalesExcelExporter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -206,6 +212,28 @@ public class UsuarioExamenFinalService {
         }
 
         return finalsWithInscriptionFlag;
+    }
+
+    public void exportToExcel(HttpServletResponse response, long idMateria)
+            throws IOException, DecoderException {
+
+        Materia materia = materiaService.findById(idMateria);
+
+        String fileName = "Final " + materia.getNombre();
+        response.setContentType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=" + fileName + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<AlumnosFinalDTO> alumnosFinal = findUsersByFinalExam(idMateria);
+
+        if (alumnosFinal != null && !alumnosFinal.isEmpty()) {
+            new AlumnosFinalesExcelExporter(alumnosFinal.get(0)).export(response);
+        } else {
+            throw new ExcelEmptyException(
+                    "Descarga fallida. El final no tiene alumnos inscriptos");
+        }
     }
 
     public void delete(Long id) {

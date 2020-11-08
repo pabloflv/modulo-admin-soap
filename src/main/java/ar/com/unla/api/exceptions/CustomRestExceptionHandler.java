@@ -12,7 +12,8 @@ public class CustomRestExceptionHandler extends RestExceptionHandler {
 
     @ExceptionHandler({
             NotFoundApiException.class,
-            TransactionBlockedException.class
+            TransactionBlockedException.class,
+            ExcelEmptyException.class
     })
     protected ResponseEntity<ApplicationResponse<Object>> handleValidationOkResponseExceptions(
             GeneralApiException generalApiException) {

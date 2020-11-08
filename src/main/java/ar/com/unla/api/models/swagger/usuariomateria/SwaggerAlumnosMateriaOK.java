@@ -1,6 +1,7 @@
 package ar.com.unla.api.models.swagger.usuariomateria;
 
 import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -9,6 +10,6 @@ import lombok.Data;
 @Data
 public final class SwaggerAlumnosMateriaOK {
 
-    private AlumnosMateriaDTO data;
+    private List<AlumnosMateriaDTO> data;
 
 }

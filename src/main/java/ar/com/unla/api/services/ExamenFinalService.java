@@ -72,7 +72,7 @@ public class ExamenFinalService {
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        String headerKey = "Content-Disposittion";
+        String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=FinalesUNLa.pdf";
 
         response.setHeader(headerKey, headerValue);

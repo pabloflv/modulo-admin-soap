@@ -5,16 +5,21 @@ import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
 import ar.com.unla.api.dtos.response.AlumnoMateriaDTO;
 import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
+import ar.com.unla.api.exceptions.ExcelEmptyException;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.models.enums.RolesEnum;
 import ar.com.unla.api.repositories.UsuarioMateriaRepository;
+import ar.com.unla.api.utils.AlumnosMateriaExcelExporter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -211,6 +216,28 @@ public class UsuarioMateriaService {
         usuarioMateria.setCalificacionExamen(calificacionExamen);
         usuarioMateria.setCalificacionTps(calificacionTps);
         return usuarioMateriaRepository.save(usuarioMateria);
+    }
+
+    public void exportToExcel(HttpServletResponse response, long idMateria)
+            throws IOException, DecoderException {
+
+        Materia materia = materiaService.findById(idMateria);
+
+        String fileName = "Cursada " + materia.getNombre();
+        response.setContentType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=" + fileName + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        List<AlumnosMateriaDTO> alumnosMateria = findStudentsBySubject(idMateria);
+
+        if (alumnosMateria != null && !alumnosMateria.isEmpty()) {
+            new AlumnosMateriaExcelExporter(alumnosMateria.get(0)).export(response);
+        } else {
+            throw new ExcelEmptyException(
+                    "Descarga fallida. La materia no tiene alumnos inscriptos");
+        }
     }
 
     public void delete(Long id) {

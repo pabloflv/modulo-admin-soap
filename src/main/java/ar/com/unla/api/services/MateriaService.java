@@ -130,8 +130,8 @@ public class MateriaService {
 
     public void exportToPDF(HttpServletResponse response) throws IOException {
         response.setContentType("application/pdf");
-        String headerKey = "Content-Disposittion";
-        String headerValue = "attachment; filename=CuetrimestreUNLa.pdf";
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=CuetrimestresUNLa.pdf";
 
         response.setHeader(headerKey, headerValue);
 
