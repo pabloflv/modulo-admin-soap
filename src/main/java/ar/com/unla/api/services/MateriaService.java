@@ -1,7 +1,6 @@
 package ar.com.unla.api.services;
 
 import ar.com.unla.api.dtos.request.MateriaDTO;
-import ar.com.unla.api.dtos.request.MateriaInscripcionDTO;
 import ar.com.unla.api.dtos.request.UsuarioMateriaDTO;
 import ar.com.unla.api.exceptions.NotFoundApiException;
 import ar.com.unla.api.exceptions.TransactionBlockedException;
@@ -10,6 +9,7 @@ import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
 import ar.com.unla.api.models.database.Turno;
 import ar.com.unla.api.models.database.Usuario;
+import ar.com.unla.api.models.database.UsuarioMateria;
 import ar.com.unla.api.repositories.MateriaRepository;
 import ar.com.unla.api.utils.MateriaPDFExporter;
 import java.io.IOException;
@@ -74,35 +74,64 @@ public class MateriaService {
         return materiaRepository.save(materia);
     }
 
-    public Materia updateSubjectIncription(long idMateria,
-            MateriaInscripcionDTO materiaInscripcionDTO) {
+    public Materia updateSubjects(long idMateria, MateriaDTO materiaDTO) {
 
-        Materia materia = findById(idMateria);
-        long inscripcionAnterior = materia.getPeriodoInscripcion().getId();
+        Materia materiaActual = findById(idMateria);
 
-        materia.getDias().clear();
+        //Si la materia posee alumnos inscriptos el nombre, el turno, el año o el cuatrimestre de
+        // la materia no pueden cambiar
+        if (!usuarioMateriaService.findStudentsBySubject(materiaActual.getId()).isEmpty()
+                && (!materiaDTO.getNombre().equalsIgnoreCase(materiaActual.getNombre())
+                || !materiaDTO.getIdTurno().equals(materiaActual.getTurno().getId())
+                || !materiaDTO.getAnioCarrera().equals(materiaActual.getAnioCarrera())
+                || !materiaDTO.getCuatrimestre().equals(materiaActual.getCuatrimestre())
+        )) {
+            throw new TransactionBlockedException(
+                    "No se puede editar el nombre, el turno, el año o el cuatrimestre de la "
+                            + "materia porque posee alumnos inscriptos");
+        }
+
+        materiaActual.getDias().clear();
 
         PeriodoInscripcion inscripcionMateria =
-                new PeriodoInscripcion(
-                        materiaInscripcionDTO.getPeriodoInscripcion().getFechaDesde(),
-                        materiaInscripcionDTO.getPeriodoInscripcion().getFechaHasta(),
-                        materiaInscripcionDTO.getPeriodoInscripcion().getFechaLimiteNota());
+                new PeriodoInscripcion(materiaDTO.getPeriodoInscripcion().getFechaDesde(),
+                        materiaDTO.getPeriodoInscripcion().getFechaHasta(),
+                        materiaDTO.getPeriodoInscripcion().getFechaLimiteNota());
 
-        materia.setPeriodoInscripcion(inscripcionMateria);
+        Turno turno = turnoService.findById(materiaDTO.getIdTurno());
+
+        Usuario profesor = usuarioService.findById(materiaDTO.getIdProfesor());
 
         Set<DiaSemana> diasSemana = new HashSet<>();
 
-        if (materiaInscripcionDTO.getDias() != null && !materiaInscripcionDTO.getDias().isEmpty()) {
-            materia.getDias().clear();
-            for (Long dia : materiaInscripcionDTO.getDias()) {
+        if (materiaDTO.getDias() != null && !materiaDTO.getDias().isEmpty()) {
+            for (Long dia : materiaDTO.getDias()) {
                 diasSemana.add(diaSemanaService.findById(dia));
             }
-            materia.getDias().addAll(diasSemana);
         }
 
-        materia = materiaRepository.save(materia);
+        //Si el profesor cambio se borra la relación del anterior profesor con esta materia
+        if (!materiaActual.getProfesor().getId().equals(materiaDTO.getIdProfesor())) {
+            UsuarioMateria usuarioMateria =
+                    usuarioMateriaService.findByUserAndSubject(materiaActual.getId(),
+                            materiaActual.getProfesor().getId(),
+                            materiaActual.getTurno().getDescripcion().toLowerCase());
+            usuarioMateriaService.delete(usuarioMateria.getId());
+        }
 
-        periodoInscripcionService.delete(inscripcionAnterior);
+        materiaActual.setNombre(materiaDTO.getNombre());
+        materiaActual.setAnioCarrera(materiaDTO.getAnioCarrera());
+        materiaActual.setCuatrimestre(materiaDTO.getCuatrimestre());
+        materiaActual.setPeriodoInscripcion(inscripcionMateria);
+        materiaActual.setProfesor(profesor);
+        materiaActual.setTurno(turno);
+        materiaActual.getDias().addAll(diasSemana);
+
+        Materia materia = materiaRepository.save(materiaActual);
+
+        //Se agrega la nueva relacion del nuevo profesor con esta materia
+        usuarioMateriaService
+                .create(new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f));
 
         return materia;
     }

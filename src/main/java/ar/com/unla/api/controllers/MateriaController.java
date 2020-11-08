@@ -1,13 +1,11 @@
 package ar.com.unla.api.controllers;
 
 import ar.com.unla.api.dtos.request.MateriaDTO;
-import ar.com.unla.api.dtos.request.MateriaInscripcionDTO;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
 import ar.com.unla.api.models.swagger.materia.SwaggerMateriaFindAllOk;
 import ar.com.unla.api.models.swagger.materia.SwaggerMateriaOk;
-import ar.com.unla.api.models.swagger.usuarioexamenfinal.SwaggerUsuarioFinalOk;
 import ar.com.unla.api.services.MateriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -106,7 +104,7 @@ public class MateriaController {
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Materia actualizada", response =
-                            SwaggerUsuarioFinalOk.class),
+                            SwaggerMateriaOk.class),
                     @ApiResponse(code = 400, message =
                             "Request incorrecta al actualizar una materia",
                             response = ErrorResponse.class),
@@ -116,13 +114,13 @@ public class MateriaController {
             }
     )
     @ResponseStatus(HttpStatus.OK)
-    public ApplicationResponse<Materia> updateSubjectIncription(
+    public ApplicationResponse<Materia> updateSubjects(
             @RequestParam(name = "idMateria")
             @NotNull(message = "El parámetro idMateria no esta informado.")
             @ApiParam(required = true) Long id,
-            @Valid @RequestBody MateriaInscripcionDTO materiaInscripcionDTO) {
+            @Valid @RequestBody MateriaDTO materiaDTO) {
         return new ApplicationResponse<>(
-                materiaService.updateSubjectIncription(id, materiaInscripcionDTO), null);
+                materiaService.updateSubjects(id, materiaDTO), null);
     }
 
     @DeleteMapping
