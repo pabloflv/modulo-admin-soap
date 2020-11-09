@@ -8,6 +8,7 @@ import ar.com.unla.api.dtos.response.AlumnosMateriaDTO;
 import ar.com.unla.api.dtos.response.MateriasInscriptasDTO;
 import ar.com.unla.api.exceptions.ExcelEmptyException;
 import ar.com.unla.api.exceptions.NotFoundApiException;
+import ar.com.unla.api.exceptions.TransactionBlockedException;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.Usuario;
 import ar.com.unla.api.models.database.UsuarioMateria;
@@ -244,39 +245,66 @@ public class UsuarioMateriaService {
 
 
     public String importByExcel(ExcelDTO excelDTO) {
+
         try {
             String tituloExcel = excelDTO.getExcel().get(0).get(0);
-
             String[] materia = tituloExcel.split("-");
-            long idMateria = Integer.parseInt(materia[1].trim());
-
-            Materia mat = materiaService.findById(idMateria);
+            Integer.parseInt(materia[1].trim());
 
             for (int i = 2; i < excelDTO.getExcel().size(); i++) {
                 if (excelDTO.getExcel().get(i).get(0) != null && !excelDTO.getExcel().get(i).get(0)
                         .isEmpty()) {
-                    long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
-                    usuarioService.findById(idUsuario);
+                    Integer.parseInt(excelDTO.getExcel().get(i).get(0));
 
                     String tp = excelDTO.getExcel().get(i).get(3).replace(",", ".");
                     String parcial = excelDTO.getExcel().get(i).get(4).replace(",", ".");
 
-                    float notaTp = (!tp.isEmpty()) ? Float.parseFloat(tp) : 0;
-
-                    float notaParcial =
-                            (!parcial.isEmpty()) ? Float.parseFloat(parcial) : 0;
-
-                    UsuarioMateria usuarioMateria =
-                            findByUserAndSubject(idMateria, idUsuario,
-                                    mat.getTurno().getDescripcion());
-
-                    updateQualification(usuarioMateria.getId(),
-                            (float) (Math.round(notaParcial * 100d) / 100d),
-                            (float) (Math.round(notaTp * 100d) / 100d));
+                    if ((!tp.isEmpty() && !parcial.isEmpty())) {
+                        Float.parseFloat(tp);
+                        Float.parseFloat(parcial);
+                    }
                 }
             }
+
         } catch (RuntimeException e) {
             throw new ExcelEmptyException("El excel adjunto no cumple con el formato correcto");
+        }
+
+        String tituloExcel = excelDTO.getExcel().get(0).get(0);
+
+        String[] materia = tituloExcel.split("-");
+        long idMateria = Integer.parseInt(materia[1].trim());
+
+        Materia mat = materiaService.findById(idMateria);
+
+        if (mat.getPeriodoInscripcion().getFechaLimiteNota().isBefore(LocalDate.now())
+        ) {
+            throw new TransactionBlockedException(
+                    "El periodo de carga de calificaciones ha finalizado");
+        }
+
+        for (int i = 2; i < excelDTO.getExcel().size(); i++) {
+            if (excelDTO.getExcel().get(i).get(0) != null && !excelDTO.getExcel().get(i).get(0)
+                    .isEmpty()) {
+                long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
+                usuarioService.findById(idUsuario);
+
+                String tp = excelDTO.getExcel().get(i).get(3).replace(",", ".");
+                String parcial = excelDTO.getExcel().get(i).get(4).replace(",", ".");
+
+                float notaTp = (!tp.isEmpty()) ? Float.parseFloat(tp) : 0;
+
+                float notaParcial =
+                        (!parcial.isEmpty()) ? Float.parseFloat(parcial) : 0;
+
+                UsuarioMateria usuarioMateria =
+                        findByUserAndSubject(idMateria, idUsuario,
+                                mat.getTurno().getDescripcion());
+
+                updateQualification(usuarioMateria.getId(),
+                        (float) (Math.round(notaParcial * 100d) / 100d),
+                        (float) (Math.round(notaTp * 100d) / 100d));
+            }
         }
 
         return "Calificaciones actualizadas con éxito";

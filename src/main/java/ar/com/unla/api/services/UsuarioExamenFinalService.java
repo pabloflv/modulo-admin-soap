@@ -8,6 +8,7 @@ import ar.com.unla.api.dtos.response.AlumnosFinalDTO;
 import ar.com.unla.api.dtos.response.FinalesInscriptosDTO;
 import ar.com.unla.api.exceptions.ExcelEmptyException;
 import ar.com.unla.api.exceptions.NotFoundApiException;
+import ar.com.unla.api.exceptions.TransactionBlockedException;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.Usuario;
@@ -238,40 +239,63 @@ public class UsuarioExamenFinalService {
     }
 
     public String importByExcel(ExcelDTO excelDTO) {
+
         try {
             String tituloExcel = excelDTO.getExcel().get(0).get(0);
-
             String[] materia = tituloExcel.split("-");
-            long idMateria = Integer.parseInt(materia[1].trim());
-
-            Materia mat = materiaService.findById(idMateria);
+            Integer.parseInt(materia[1].trim());
 
             for (int i = 2; i < excelDTO.getExcel().size(); i++) {
                 if (excelDTO.getExcel().get(i).get(0) != null && !excelDTO.getExcel().get(i).get(0)
                         .isEmpty()) {
-                    long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
-                    usuarioService.findById(idUsuario);
+                    Integer.parseInt(excelDTO.getExcel().get(i).get(0));
 
                     String examenFinal = excelDTO.getExcel().get(i).get(3).replace(",", ".");
 
-                    float notaFinal =
-                            (!examenFinal.isEmpty()) ? Float.parseFloat(examenFinal) : 0;
-
-                    UsuarioExamenFinal usuarioExamenFinal =
-                            usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario,
-                                    mat.getTurno().getDescripcion())
-                                    .orElseThrow(() -> new NotFoundApiException(
-                                            "No se encontro el examen final del usuario indicado"
-                                                    + "."));
-
-                    updateQualification(usuarioExamenFinal.getId(),
-                            (float) (Math.round(notaFinal * 100d) / 100d));
+                    if ((!examenFinal.isEmpty())) {
+                        Float.parseFloat(examenFinal);
+                    }
                 }
             }
         } catch (RuntimeException e) {
-            throw new ExcelEmptyException("El excel adjunto no cumple con el formato correcto");
+            throw new ExcelEmptyException(
+                    "El excel adjunto no cumple con el formato correcto");
         }
 
+        String tituloExcel = excelDTO.getExcel().get(0).get(0);
+        String[] materia = tituloExcel.split("-");
+        long idMateria = Integer.parseInt(materia[1].trim());
+
+        Materia mat = materiaService.findById(idMateria);
+
+        for (int i = 2; i < excelDTO.getExcel().size(); i++) {
+            if (excelDTO.getExcel().get(i).get(0) != null && !excelDTO.getExcel().get(i).get(0)
+                    .isEmpty()) {
+                long idUsuario = Integer.parseInt(excelDTO.getExcel().get(i).get(0));
+                usuarioService.findById(idUsuario);
+
+                String examenFinal = excelDTO.getExcel().get(i).get(3).replace(",", ".");
+
+                float notaFinal =
+                        (!examenFinal.isEmpty()) ? Float.parseFloat(examenFinal) : 0;
+
+                UsuarioExamenFinal usuarioExamenFinal =
+                        usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario,
+                                mat.getTurno().getDescripcion())
+                                .orElseThrow(() -> new NotFoundApiException(
+                                        "No se encontro el examen final con el usuario indicado"
+                                                + "."));
+
+                if (usuarioExamenFinal.getExamenFinal().getPeriodoInscripcion()
+                        .getFechaLimiteNota().isBefore(LocalDate.now())) {
+                    throw new TransactionBlockedException(
+                            "El periodo de carga de calificaciones ha finalizado");
+                }
+
+                updateQualification(usuarioExamenFinal.getId(),
+                        (float) (Math.round(notaFinal * 100d) / 100d));
+            }
+        }
         return "Calificaciones actualizadas con éxito";
     }
 
