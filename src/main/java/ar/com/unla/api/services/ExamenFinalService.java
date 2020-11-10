@@ -99,7 +99,12 @@ public class ExamenFinalService {
 
         finalActual.setMateria(materiaService.findById(examenFinalDTO.getIdMateria()));
 
-        return examenFinalRepository.save(finalActual);
+        ExamenFinal examenFinal = examenFinalRepository.save(finalActual);
+
+        UsuarioExamenFinalDTO usuarioExamenFinalDTO = new UsuarioExamenFinalDTO(examenFinal.getId(),
+                examenFinal.getMateria().getProfesor().getId(), false, 0f);
+        usuarioExamenFinalService.create(usuarioExamenFinalDTO);
+        return examenFinal;
     }
 
     public void delete(Long id) {
