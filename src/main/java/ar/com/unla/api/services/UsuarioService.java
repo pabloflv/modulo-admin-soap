@@ -27,6 +27,9 @@ public class UsuarioService {
     @Autowired
     private RolService rolService;
 
+    @Autowired
+    private MailService mailService;
+
     public Usuario create(UsuarioDTO usuarioDTO) {
 
         Rol rol = rolService.findById(usuarioDTO.getIdRol());
@@ -39,6 +42,11 @@ public class UsuarioService {
                 usuarioDTO.getTelefono(), usuarioDTO.getDni(), usuarioDTO.getEmail().toLowerCase(),
                 direccion, usuarioDTO.getPassword(), usuarioDTO.getImagen(),
                 usuarioDTO.getPrimerIngreso(), rol);
+
+        mailService.sendMail(usuario.getEmail(), "Alta de usuario\n\n",
+                "Usuario: " + usuario.getEmail() + "\n" +
+                        "Password: " + usuario.getPassword() + "\n\n" +
+                        "El password es provisorio, debera cambiarse en el primer ingreso.");
 
         return usuarioRepository.save(usuario);
     }
@@ -127,6 +135,9 @@ public class UsuarioService {
             findById(id);
             usuarioRepository.deleteById(id);
         } catch (RuntimeException e) {
+            if (e instanceof NotFoundApiException) {
+                throw new NotFoundApiException(e.getMessage());
+            }
             throw new TransactionBlockedException(
                     "No se puede eliminar el usuario porque esta relacionado a otros elementos de"
                             + " la aplicación");

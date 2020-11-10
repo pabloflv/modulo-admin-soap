@@ -64,6 +64,9 @@ public class ExamenFinalService {
             examenFinalRepository.deleteById(id);
 
         } catch (RuntimeException e) {
+            if (e instanceof NotFoundApiException) {
+                throw new NotFoundApiException(e.getMessage());
+            }
             throw new TransactionBlockedException(
                     "No se puede eliminar el examen final porque esta relacionado a otros "
                             + "elementos de la aplicación");

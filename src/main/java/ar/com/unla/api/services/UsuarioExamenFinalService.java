@@ -41,6 +41,9 @@ public class UsuarioExamenFinalService {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private MailService mailService;
+
     public UsuarioExamenFinal create(UsuarioExamenFinalDTO usuarioExamenFinalDTO) {
 
         ExamenFinal examenFinal =
@@ -64,6 +67,20 @@ public class UsuarioExamenFinalService {
     public UsuarioExamenFinal updateRemainder(Long id, Boolean recordatorio) {
         UsuarioExamenFinal usuarioExamenFinal = findById(id);
         usuarioExamenFinal.setRecordatorio(recordatorio);
+
+        if (recordatorio) {
+            mailService.sendMail(usuarioExamenFinal.getUsuario().getEmail(),
+                    "Notificación Final UNLa" + "\n\n",
+                    "Materia: " + usuarioExamenFinal.getExamenFinal().getMateria().getNombre()
+                            + "\n" +
+                            "Fecha: " + usuarioExamenFinal.getExamenFinal().getFecha().toString()
+                            + "\n" +
+                            "Horario: "
+                            + usuarioExamenFinal.getExamenFinal().getMateria().getTurno()
+                            .getHoraDesde() + " - " + usuarioExamenFinal.getExamenFinal()
+                            .getMateria().getTurno().getHoraHasta());
+        }
+
         return usuarioExamenFinalRepository.save(usuarioExamenFinal);
     }
 

@@ -151,6 +151,9 @@ public class MateriaService {
             findById(id);
             materiaRepository.deleteById(id);
         } catch (RuntimeException e) {
+            if (e instanceof NotFoundApiException) {
+                throw new NotFoundApiException(e.getMessage());
+            }
             throw new TransactionBlockedException(
                     "No se puede eliminar la materia porque esta relacionada a otros elementos de"
                             + " la aplicación");
