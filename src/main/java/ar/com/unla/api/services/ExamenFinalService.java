@@ -7,6 +7,7 @@ import ar.com.unla.api.exceptions.TransactionBlockedException;
 import ar.com.unla.api.models.database.ExamenFinal;
 import ar.com.unla.api.models.database.Materia;
 import ar.com.unla.api.models.database.PeriodoInscripcion;
+import ar.com.unla.api.models.database.UsuarioExamenFinal;
 import ar.com.unla.api.repositories.ExamenFinalRepository;
 import ar.com.unla.api.utils.FinalesPDFExporter;
 import java.io.IOException;
@@ -26,7 +27,6 @@ public class ExamenFinalService {
 
     @Autowired
     private UsuarioExamenFinalService usuarioExamenFinalService;
-
 
     public ExamenFinal create(ExamenFinalDTO examenFinalDTO) {
 
@@ -56,6 +56,50 @@ public class ExamenFinalService {
 
     public List<ExamenFinal> findAll() {
         return examenFinalRepository.findAll();
+    }
+
+
+    public ExamenFinal updateFinalExam(long idFinal, ExamenFinalDTO examenFinalDTO) {
+
+        ExamenFinal finalActual = findById(idFinal);
+
+        //Si el final posee alumnos inscriptos la meteria y las fechas de inscripcion no pueden
+        // cambiar
+        if (!usuarioExamenFinalService.findUsersByFinalExam(finalActual.getMateria().getId())
+                .isEmpty()
+                && (!examenFinalDTO.getIdMateria().equals(finalActual.getMateria().getId())
+                || !examenFinalDTO.getPeriodoInscripcion().getFechaDesde()
+                .equals(finalActual.getPeriodoInscripcion().getFechaDesde())
+                || !examenFinalDTO.getPeriodoInscripcion().getFechaHasta()
+                .equals(finalActual.getPeriodoInscripcion().getFechaHasta())
+                || !examenFinalDTO.getFecha().equals(finalActual.getFecha()))
+        ) {
+            throw new TransactionBlockedException(
+                    "No se puede editar la materia, las fechas de inscripción o la fecha del "
+                            + "final porque posee alumnos inscriptos");
+        }
+
+        PeriodoInscripcion inscripcionFinal =
+                new PeriodoInscripcion(examenFinalDTO.getPeriodoInscripcion().getFechaDesde(),
+                        examenFinalDTO.getPeriodoInscripcion().getFechaHasta(),
+                        examenFinalDTO.getPeriodoInscripcion().getFechaLimiteNota());
+
+        finalActual.setFecha(examenFinalDTO.getFecha());
+        finalActual.setPeriodoInscripcion(inscripcionFinal);
+
+        //Si la materia cambio se borra la relación de la anterior materia con este final
+        if (!finalActual.getMateria().getId().equals(examenFinalDTO.getIdMateria())) {
+            UsuarioExamenFinal usuarioExamenFinal = usuarioExamenFinalService
+                    .findUsuarioExamenFinal(finalActual.getMateria().getId(),
+                            finalActual.getMateria().getProfesor().getId(),
+                            finalActual.getMateria().getTurno().getDescripcion());
+            usuarioExamenFinalService
+                    .delete(usuarioExamenFinal.getId());
+        }
+
+        finalActual.setMateria(materiaService.findById(examenFinalDTO.getIdMateria()));
+
+        return examenFinalRepository.save(finalActual);
     }
 
     public void delete(Long id) {

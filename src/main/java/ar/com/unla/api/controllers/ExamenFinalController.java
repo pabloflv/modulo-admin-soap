@@ -6,6 +6,7 @@ import ar.com.unla.api.models.response.ApplicationResponse;
 import ar.com.unla.api.models.response.ErrorResponse;
 import ar.com.unla.api.models.swagger.examenfinal.SwaggerExamenFinalFindAllOk;
 import ar.com.unla.api.models.swagger.examenfinal.SwaggerExamenFinalOk;
+import ar.com.unla.api.models.swagger.materia.SwaggerMateriaOk;
 import ar.com.unla.api.services.ExamenFinalService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -102,6 +104,30 @@ public class ExamenFinalController {
     @ApiOperation(value = "Se encarga de generar un pdf con la planilla de los finales")
     public void exportToPDF(HttpServletResponse response) throws IOException {
         examenFinalService.exportToPDF(response);
+    }
+
+    @PutMapping
+    @ApiOperation(value = "Se encarga de actualizar un examen final")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "Examen final actualizado", response =
+                            SwaggerMateriaOk.class),
+                    @ApiResponse(code = 400, message =
+                            "Request incorrecta al actualizar un examen final",
+                            response = ErrorResponse.class),
+                    @ApiResponse(code = 500, message =
+                            "Error interno al actualizar un examen final",
+                            response = ErrorResponse.class)
+            }
+    )
+    @ResponseStatus(HttpStatus.OK)
+    public ApplicationResponse<ExamenFinal> updateFinalExam(
+            @RequestParam(name = "idExamenFinal")
+            @NotNull(message = "El parámetro idExamenFinal no esta informado.")
+            @ApiParam(required = true) Long id,
+            @Valid @RequestBody ExamenFinalDTO examenFinalDTO) {
+        return new ApplicationResponse<>(
+                examenFinalService.updateFinalExam(id, examenFinalDTO), null);
     }
 
     @DeleteMapping

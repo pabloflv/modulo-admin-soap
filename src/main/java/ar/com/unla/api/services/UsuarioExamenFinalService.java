@@ -113,6 +113,12 @@ public class UsuarioExamenFinalService {
         return alumnos;
     }
 
+    public UsuarioExamenFinal findUsuarioExamenFinal(long idMateria, long idUsuario, String turno) {
+        return usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario, turno)
+                .orElseThrow(() -> new NotFoundApiException(
+                        "No se encontro el examen final con el usuario indicado."));
+    }
+
     public List<UsuarioExamenFinal> findFinalExamsByUser(Long idUsuario) {
         usuarioService.findById(idUsuario);
         return usuarioExamenFinalRepository.findFinalExamsByUser(idUsuario);

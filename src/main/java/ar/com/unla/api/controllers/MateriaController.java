@@ -99,8 +99,7 @@ public class MateriaController {
     }
 
     @PutMapping
-    @ApiOperation(value = "Se encarga de actualizar el periodo de inscripcion y los dias de"
-            + "cursada de una materia")
+    @ApiOperation(value = "Se encarga de actualizar una materia")
     @ApiResponses(
             value = {
                     @ApiResponse(code = 200, message = "Materia actualizada", response =
