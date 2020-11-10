@@ -114,9 +114,14 @@ public class UsuarioExamenFinalService {
     }
 
     public UsuarioExamenFinal findUsuarioExamenFinal(long idMateria, long idUsuario, String turno) {
-        return usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario, turno)
-                .orElseThrow(() -> new NotFoundApiException(
-                        "No se encontro el examen final con el usuario indicado."));
+        if (usuarioService.findById(idUsuario).getRol().getDescripcion().equals("docente")) {
+            return usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario, turno)
+                    .orElse(new UsuarioExamenFinal());
+        } else {
+            return usuarioExamenFinalRepository.findUserFinalExam(idMateria, idUsuario, turno)
+                    .orElseThrow(() -> new NotFoundApiException(
+                            "No se encontro el examen final con el usuario indicado."));
+        }
     }
 
     public List<UsuarioExamenFinal> findFinalExamsByUser(Long idUsuario) {

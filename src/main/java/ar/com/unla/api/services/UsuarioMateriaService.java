@@ -60,9 +60,15 @@ public class UsuarioMateriaService {
 
     public UsuarioMateria findByUserAndSubject(Long idMateria, Long idUsuario,
             String descripcionTurno) {
-        return usuarioMateriaRepository.findUserSubject(idMateria, idUsuario, descripcionTurno)
-                .orElseThrow(() -> new NotFoundApiException(
-                        "No se encontro el UsuarioMateria indicado."));
+
+        if (usuarioService.findById(idUsuario).getRol().getDescripcion().equals("docente")) {
+            return usuarioMateriaRepository.findUserSubject(idMateria, idUsuario, descripcionTurno)
+                    .orElse(new UsuarioMateria());
+        } else {
+            return usuarioMateriaRepository.findUserSubject(idMateria, idUsuario, descripcionTurno)
+                    .orElseThrow(() -> new NotFoundApiException(
+                            "No se encontro el UsuarioMateria indicado."));
+        }
     }
 
     public List<AlumnosMateriaDTO> findStudentsBySubject(Long idMateria) {

@@ -116,7 +116,9 @@ public class MateriaService {
                     usuarioMateriaService.findByUserAndSubject(materiaActual.getId(),
                             materiaActual.getProfesor().getId(),
                             materiaActual.getTurno().getDescripcion().toLowerCase());
-            usuarioMateriaService.delete(usuarioMateria.getId());
+            if (usuarioMateria.getId() != null) {
+                usuarioMateriaService.delete(usuarioMateria.getId());
+            }
         }
 
         materiaActual.setNombre(materiaDTO.getNombre());
@@ -131,11 +133,11 @@ public class MateriaService {
         materiaActual.getDias().addAll(diasSemana);
 
         Materia materia = materiaRepository.save(materiaActual);
-        if (!materiaActual.getProfesor().getId().equals(materiaDTO.getIdProfesor())) {
-            //Se agrega la nueva relacion del nuevo profesor con esta materia
-            usuarioMateriaService
-                    .create(new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f));
-        }
+
+        //Se agrega la nueva relacion del nuevo profesor con esta materia
+        usuarioMateriaService
+                .create(new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f));
+
         return materia;
     }
 

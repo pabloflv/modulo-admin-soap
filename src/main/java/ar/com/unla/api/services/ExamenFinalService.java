@@ -93,19 +93,23 @@ public class ExamenFinalService {
                     .findUsuarioExamenFinal(finalActual.getMateria().getId(),
                             finalActual.getMateria().getProfesor().getId(),
                             finalActual.getMateria().getTurno().getDescripcion());
-            usuarioExamenFinalService
-                    .delete(usuarioExamenFinal.getId());
+
+            if (usuarioExamenFinal.getId() != null) {
+                usuarioExamenFinalService
+                        .delete(usuarioExamenFinal.getId());
+            }
         }
+
         if (!finalActual.getMateria().getId().equals(examenFinalDTO.getIdMateria())) {
             finalActual.setMateria(materiaService.findById(examenFinalDTO.getIdMateria()));
         }
+
         ExamenFinal examenFinalNuevo = examenFinalRepository.save(finalActual);
 
-        if (!finalActual.getMateria().getId().equals(examenFinalDTO.getIdMateria())) {
-            //Se crea la nueva relación del profesor anterior con este final
-            usuarioExamenFinalService.create(new UsuarioExamenFinalDTO(examenFinalNuevo.getId(),
-                    examenFinalNuevo.getMateria().getProfesor().getId(), false, 0f));
-        }
+        //Se crea la nueva relación del profesor anterior con este final
+        usuarioExamenFinalService.create(new UsuarioExamenFinalDTO(examenFinalNuevo.getId(),
+                examenFinalNuevo.getMateria().getProfesor().getId(), false, 0f));
+
         return examenFinalNuevo;
     }
 
