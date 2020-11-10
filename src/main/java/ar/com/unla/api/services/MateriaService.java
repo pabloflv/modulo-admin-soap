@@ -123,16 +123,19 @@ public class MateriaService {
         materiaActual.setAnioCarrera(materiaDTO.getAnioCarrera());
         materiaActual.setCuatrimestre(materiaDTO.getCuatrimestre());
         materiaActual.setPeriodoInscripcion(inscripcionMateria);
-        materiaActual.setProfesor(profesor);
+
+        if (!materiaActual.getProfesor().getId().equals(materiaDTO.getIdProfesor())) {
+            materiaActual.setProfesor(profesor);
+        }
         materiaActual.setTurno(turno);
         materiaActual.getDias().addAll(diasSemana);
 
         Materia materia = materiaRepository.save(materiaActual);
-
-        //Se agrega la nueva relacion del nuevo profesor con esta materia
-        usuarioMateriaService
-                .create(new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f));
-
+        if (!materiaActual.getProfesor().getId().equals(materiaDTO.getIdProfesor())) {
+            //Se agrega la nueva relacion del nuevo profesor con esta materia
+            usuarioMateriaService
+                    .create(new UsuarioMateriaDTO(materia.getId(), profesor.getId(), 0f, 0f));
+        }
         return materia;
     }
 

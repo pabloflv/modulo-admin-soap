@@ -87,7 +87,7 @@ public class ExamenFinalService {
         finalActual.setFecha(examenFinalDTO.getFecha());
         finalActual.setPeriodoInscripcion(inscripcionFinal);
 
-        //Si la materia cambio se borra la relación de la anterior materia con este final
+        //Si la materia cambio se borra la relación del profesor anterior con este final
         if (!finalActual.getMateria().getId().equals(examenFinalDTO.getIdMateria())) {
             UsuarioExamenFinal usuarioExamenFinal = usuarioExamenFinalService
                     .findUsuarioExamenFinal(finalActual.getMateria().getId(),
@@ -96,15 +96,16 @@ public class ExamenFinalService {
             usuarioExamenFinalService
                     .delete(usuarioExamenFinal.getId());
         }
-
-        finalActual.setMateria(materiaService.findById(examenFinalDTO.getIdMateria()));
-
+        if (!finalActual.getMateria().getId().equals(examenFinalDTO.getIdMateria())) {
+            finalActual.setMateria(materiaService.findById(examenFinalDTO.getIdMateria()));
+        }
         ExamenFinal examenFinalNuevo = examenFinalRepository.save(finalActual);
 
-        UsuarioExamenFinalDTO usuarioExamenFinalDTO =
-                new UsuarioExamenFinalDTO(examenFinalNuevo.getId(),
-                        examenFinalNuevo.getMateria().getProfesor().getId(), false, 0f);
-        usuarioExamenFinalService.create(usuarioExamenFinalDTO);
+        if (!finalActual.getMateria().getId().equals(examenFinalDTO.getIdMateria())) {
+            //Se crea la nueva relación del profesor anterior con este final
+            usuarioExamenFinalService.create(new UsuarioExamenFinalDTO(examenFinalNuevo.getId(),
+                    examenFinalNuevo.getMateria().getProfesor().getId(), false, 0f));
+        }
         return examenFinalNuevo;
     }
 
